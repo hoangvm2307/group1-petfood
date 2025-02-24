@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Trang chủ" />
+
+    <item
+        android:id="@+id/nav_about"
+        android:title="Giới thiệu về Keos" />
+
+    <item
+        android:id="@+id/nav_products"
+        android:title="Sản phẩm"
+        android:icon="@drawable/ic_arrow_right" />
+
+    <item
+        android:id="@+id/nav_blog"
+        android:title="Blog"
+        android:icon="@drawable/ic_arrow_right" />
+
+    <item
+        android:id="@+id/nav_contact"
+        android:title="Liên hệ" />
+
+    <item
+        android:id="@+id/nav_distribution"
+        android:title="Hệ thống phân phối" />
+
+    <group android:id="@+id/group_help">
+        <item
+            android:id="@+id/nav_help"
+            android:title="BẠN CẦN HỖ TRỢ?"
+            android:enabled="false"
+            android:textStyle="bold"
+            android:textColor="#209381" />
+
+        <item
+            android:id="@+id/nav_phone"
+            android:icon="@drawable/ic_call"
+            android:title="02923744445" />
+
+        <item
+            android:id="@+id/nav_email"
+            android:icon="@drawable/ic_email"
+            android:title="contact@keos.vn" />
+    </group>
+</menu>

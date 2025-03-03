@@ -22,6 +22,7 @@ import com.example.group1_petfood.adapters.ProductAdapter;
 import com.example.group1_petfood.controllers.CategoryController;
 import com.example.group1_petfood.controllers.ProductController;
 import com.example.group1_petfood.database.DatabaseHelper;
+import com.example.group1_petfood.database.DatabaseInitializer;
 import com.example.group1_petfood.models.Category;
 import com.example.group1_petfood.models.Product;
 import com.google.android.material.navigation.NavigationView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private CategoryController categoryController;
     private ProductController productController;
+    private DatabaseInitializer dbInitializer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,21 +55,22 @@ public class MainActivity extends AppCompatActivity {
         setupNavigationDrawer();
         setupBanner();
         setupRecyclerViews();
-//        initializeDatabase();
+        initializeDatabase();
         loadData();
     }
 
     private void initializeDatabase() {
         try {
+            // Khởi tạo DatabaseHelper
             dbHelper = new DatabaseHelper(this);
-            // Open database to create tables
-            dbHelper.getWritableDatabase();
-            Log.d(TAG, "Database initialized successfully");
 
-            // Insert sample data if needed
-            insertSampleData();
+            // Sử dụng DatabaseInitializer để tạo và nạp dữ liệu mẫu
+            dbInitializer = new DatabaseInitializer(this);
+            dbInitializer.initializeDatabase();
+
+            Log.d(TAG, "Cơ sở dữ liệu đã được khởi tạo thành công");
         } catch (Exception e) {
-            Log.e(TAG, "Error initializing database", e);
+            Log.e(TAG, "Lỗi khi khởi tạo cơ sở dữ liệu", e);
         }
     }
 

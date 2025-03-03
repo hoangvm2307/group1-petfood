@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.example.group1_petfood.models.Product;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
+    private static final String TAG = "ProductAdapter";
     private List<Product> products;
     private Context context;
 
@@ -36,56 +38,88 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-       try{
-           Product product = products.get(position);
+        try {
+            Product product = products.get(position);
 
-           // Set product details
-           holder.nameTextView.setText(product.getName());
-           holder.weightTextView.setText(product.getStockQuantity());
+            // Set product details
+            holder.nameTextView.setText(product.getName());
 
-           // Format and set prices
-           String originalPrice = String.format("%,d₫", product.getPrice());
-           String salePrice = String.format("%,d₫", product.getPrice() * 0.8);
+            // Lấy mô tả sản phẩm để tìm trọng lượng
+            String description = product.getDescription();
+            String weight = "";
 
-           holder.originalPriceTextView.setText(originalPrice);
-           holder.originalPriceTextView.setPaintFlags(holder.originalPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-           holder.salePriceTextView.setText(salePrice);
+            // Tìm thông tin trọng lượng từ mô tả
+            if (description != null && description.contains("Trọng lượng:")) {
+                int startIndex = description.indexOf("Trọng lượng:") + 12;
+                int endIndex = description.indexOf(".", startIndex);
+                if (endIndex == -1) {
+                    endIndex = description.length();
+                }
+                if (startIndex < endIndex) {
+                    weight = description.substring(startIndex, endIndex).trim();
+                }
+            }
 
-           // Calculate and set discount percentage
-           if (product.getPrice() > product.getPrice() * 0.8) {
-               int discount = (int) ((1 - (float)product.getPrice() * 0.8/product.getPrice()) * 100);
-               holder.discountTextView.setText("-" + discount + "%");
-               holder.discountTextView.setVisibility(View.VISIBLE);
-           } else {
-               holder.discountTextView.setVisibility(View.GONE);
-           }
+            // Nếu không tìm thấy trọng lượng từ mô tả, hiển thị giá trị mặc định
+            if (weight.isEmpty()) {
+                weight = "(400g - 1.5kg)";
+            }
 
-           // Load product image
-           int imageResId = context.getResources().getIdentifier(product.getImageUrl(), "drawable", context.getPackageName());
-           if (imageResId != 0) {
-               holder.imageView.setImageResource(imageResId);
-           } else {
-               holder.imageView.setImageResource(R.drawable.slide_1_img);
-           }
+            holder.weightTextView.setText(weight);
 
-           holder.addToCartButton.setOnClickListener(v -> {
-               // Handle add to cart action
-           });
+            // Format và hiển thị giá
+            double originalPrice = product.getPrice();
+            double salePrice = originalPrice * 0.8; // Giá giảm 20%
 
-//        holder.itemView.setOnClickListener(v -> {
-//            // Handle product click
-//            Intent intent = new Intent(context, ProductDetailActivity.class);
-//            intent.putExtra("product_id", product.getId());
-//            context.startActivity(intent);
-//        });
-       }catch (Exception e){
+            holder.originalPriceTextView.setText(String.format("%,.0f₫", originalPrice));
+            holder.originalPriceTextView.setPaintFlags(holder.originalPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.salePriceTextView.setText(String.format("%,.0f₫", salePrice));
 
-       }
+            // Tính và hiển thị phần trăm giảm giá
+            int discount = 20; // Mặc định giảm 20%
+            holder.discountTextView.setText("-" + discount + "%");
+            holder.discountTextView.setVisibility(View.VISIBLE);
+
+            // Tải hình ảnh sản phẩm
+            String imageUrl = product.getImageUrl();
+            Log.d(TAG, "Tải hình ảnh: " + imageUrl);
+
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                int imageResId = context.getResources().getIdentifier(imageUrl, "drawable", context.getPackageName());
+                if (imageResId != 0) {
+                    holder.imageView.setImageResource(imageResId);
+                    Log.d(TAG, "Đã tìm thấy hình ảnh: " + imageUrl);
+                } else {
+                    holder.imageView.setImageResource(R.drawable.slide_1_img);
+                    Log.d(TAG, "Không tìm thấy hình ảnh: " + imageUrl);
+                }
+            } else {
+                holder.imageView.setImageResource(R.drawable.slide_1_img);
+                Log.d(TAG, "URL hình ảnh trống hoặc null");
+            }
+
+            holder.addToCartButton.setOnClickListener(v -> {
+                // Xử lý thêm vào giỏ hàng
+                Log.d(TAG, "Thêm vào giỏ: " + product.getName());
+            });
+
+            holder.itemView.setOnClickListener(v -> {
+                // Xử lý khi click vào sản phẩm
+                Log.d(TAG, "Xem chi tiết sản phẩm: " + product.getName());
+                // Tạm thời bỏ comment vì chưa có ProductDetailActivity
+                // Intent intent = new Intent(context, ProductDetailActivity.class);
+                // intent.putExtra("product_id", product.getId());
+                // context.startActivity(intent);
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi hiển thị sản phẩm: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return products.size();
+        return products != null ? products.size() : 0;
     }
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {

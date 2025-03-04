@@ -131,8 +131,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Danh mục sản phẩm"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:textColor="@color/green"
+                    android:textSize="20sp"
                     android:padding="16dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -146,8 +146,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sản phẩm nổi bật"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:textColor="@color/green"
+                    android:textSize="20sp"
                     android:padding="16dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView

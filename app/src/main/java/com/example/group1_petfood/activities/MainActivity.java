@@ -1,12 +1,16 @@
 package com.example.group1_petfood.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -19,10 +23,12 @@ import com.example.group1_petfood.R;
 import com.example.group1_petfood.adapters.BannerAdapter;
 import com.example.group1_petfood.adapters.CategoryAdapter;
 import com.example.group1_petfood.adapters.ProductAdapter;
+import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.controllers.CategoryController;
 import com.example.group1_petfood.controllers.ProductController;
 import com.example.group1_petfood.database.DatabaseHelper;
 import com.example.group1_petfood.database.DatabaseInitializer;
+import com.example.group1_petfood.fragments.CartDialogFragment;
 import com.example.group1_petfood.models.Category;
 import com.example.group1_petfood.models.Product;
 import com.google.android.material.navigation.NavigationView;
@@ -44,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private CategoryController categoryController;
     private ProductController productController;
     private DatabaseInitializer dbInitializer;
+    private CartController cartController;
+    private TextView cartBadge;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,9 +64,16 @@ public class MainActivity extends AppCompatActivity {
         setupBanner();
         setupRecyclerViews();
         initializeDatabase();
+        updateCartBadge();
+
         loadData();
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Cập nhật lại số lượng trong giỏ hàng mỗi khi quay lại MainActivity
+        updateCartBadge();
+    }
     private void initializeDatabase() {
         try {
             // Khởi tạo DatabaseHelper
@@ -74,9 +89,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void openCartActivity() {
+        // Hiển thị CartDialogFragment thay vì BottomSheetDialogFragment
+        CartDialogFragment cartFragment = new CartDialogFragment();
+        cartFragment.show(getSupportFragmentManager(), "CartDialog");
+    }
     private void initializeControllers() {
         categoryController = new CategoryController(this);
         productController = new ProductController(this);
+        cartController = new CartController(this);
     }
 
     private void initializeViews() {
@@ -86,12 +107,47 @@ public class MainActivity extends AppCompatActivity {
         quickActionsRecyclerView = findViewById(R.id.quickActionsRecyclerView);
         categoriesRecyclerView = findViewById(R.id.categoriesRecyclerView);
         productsRecyclerView = findViewById(R.id.productsRecyclerView);
-
+        cartBadge = findViewById(R.id.cartBadge);
         findViewById(R.id.menuButton).setOnClickListener(v -> drawerLayout.open());
 //        findViewById(R.id.chatButton).setOnClickListener(v -> openChat());
-        findViewById(R.id.callButton).setOnClickListener(v -> makeCall());
+        findViewById(R.id.callButton).setOnClickListener(v -> openCartActivity());
+        findViewById(R.id.cartButton).setOnClickListener(v -> openCartActivity());
     }
+    private void updateCartBadge() {
+        try {
+            // Lấy số lượng sản phẩm trong giỏ hàng
+            int itemCount = cartController.getCartItemCount();
 
+            // Tìm TextView hiển thị số lượng trong MainActivity
+            TextView cartBadge =  findViewById(R.id.cartBadge);
+            if (cartBadge != null) {
+                cartBadge.setText(String.valueOf(itemCount));
+
+                // Hiển thị badge nếu có sản phẩm trong giỏ hàng, ẩn nếu không có
+                if (itemCount > 0) {
+                    cartBadge.setVisibility(View.VISIBLE);
+
+                    // Đặt background màu đỏ cho badge
+                    cartBadge.setBackgroundResource(R.drawable.cart_badge_background);
+
+                    // Đặt padding để hiển thị tốt hơn
+                    int padding = (int) (4 * this.getResources().getDisplayMetrics().density);
+                    cartBadge.setPadding(padding, 0, padding, 0);
+
+                    // Đặt style cho text
+                    cartBadge.setTextColor(Color.WHITE);
+                    cartBadge.setTypeface(null, Typeface.BOLD);
+                    cartBadge.setGravity(Gravity.CENTER);
+                } else {
+                    cartBadge.setVisibility(View.GONE);
+                }
+            }
+
+            Log.d(TAG, "Đã cập nhật badge giỏ hàng: " + itemCount + " sản phẩm");
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi cập nhật badge giỏ hàng: " + e.getMessage());
+        }
+    }
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -16,7 +16,15 @@ public class DatabaseInitializer {
         this.context = context;
         this.dbHelper = new DatabaseHelper(context);
     }
-
+    public void clearAllCartItems() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        try {
+            db.execSQL("DELETE FROM cart");
+            // Hoặc có thể sử dụng: db.delete("cart", null, null);
+        } finally {
+            db.close();
+        }
+    }
     /**
      * Khởi tạo cơ sở dữ liệu và thêm dữ liệu mẫu
      */
@@ -26,8 +34,7 @@ public class DatabaseInitializer {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             Log.d(TAG, "Cơ sở dữ liệu đã được khởi tạo thành công");
 
-            // Thêm dữ liệu mẫu
-            insertSampleData();
+//            clearAllCartItems();
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi khởi tạo cơ sở dữ liệu", e);
         }
@@ -63,8 +70,8 @@ public class DatabaseInitializer {
         db.execSQL("DELETE FROM categories");
 
         // Thêm các danh mục mới
-        db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (1, 'Thức ăn cho chó', 'Các loại thức ăn dinh dưỡng dành cho chó', 'dog_category')");
-        db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (2, 'Thức ăn cho mèo', 'Các loại thức ăn dinh dưỡng dành cho mèo', 'cat_category')");
+        db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (1, 'Thức ăn cho chó', 'Các loại thức ăn dinh dưỡng dành cho chó', 'dog_food_category')");
+        db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (2, 'Thức ăn cho mèo', 'Các loại thức ăn dinh dưỡng dành cho mèo', 'cat_food_category')");
         db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (3, 'Phụ kiện', 'Các loại phụ kiện dành cho thú cưng', 'accessories_category')");
         db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (4, 'Đồ chơi', 'Đồ chơi cho thú cưng', 'toys_category')");
         db.execSQL("INSERT OR IGNORE INTO categories (id, name, description, image_url) VALUES (5, 'Chăm sóc sức khỏe', 'Sản phẩm chăm sóc sức khỏe thú cưng', 'healthcare_category')");

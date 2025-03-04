@@ -2,7 +2,10 @@ package com.example.group1_petfood.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +13,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.group1_petfood.R;
+import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.models.Product;
 
 import java.util.List;
@@ -23,6 +28,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private static final String TAG = "ProductAdapter";
     private List<Product> products;
     private Context context;
+    private CartController cartController;
 
     public ProductAdapter(List<Product> products) {
         this.products = products;
@@ -32,6 +38,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
+        // Khởi tạo CartController
+        cartController = new CartController(context);
         View view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
         return new ProductViewHolder(view);
     }
@@ -98,9 +106,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 Log.d(TAG, "URL hình ảnh trống hoặc null");
             }
 
+            // Xử lý sự kiện "Thêm vào giỏ"
             holder.addToCartButton.setOnClickListener(v -> {
-                // Xử lý thêm vào giỏ hàng
-                Log.d(TAG, "Thêm vào giỏ: " + product.getName());
+                addToCart(product);
             });
 
             holder.itemView.setOnClickListener(v -> {
@@ -114,6 +122,81 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi hiển thị sản phẩm: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Thêm sản phẩm vào giỏ hàng
+     * @param product Sản phẩm cần thêm vào giỏ
+     */
+    private void addToCart(Product product) {
+        try {
+            boolean success = cartController.addToCart(product.getId(), 1);
+            if (success) {
+                // Hiển thị thông báo thành công
+                Toast.makeText(context,
+                        "Đã thêm " + product.getName() + " vào giỏ hàng",
+                        Toast.LENGTH_SHORT).show();
+
+                Log.d(TAG, "Đã thêm sản phẩm vào giỏ: " + product.getName() +
+                        ", ID: " + product.getId());
+
+                // Cập nhật số lượng hiển thị trên icon giỏ hàng (nếu có)
+                updateCartBadge();
+            } else {
+                // Hiển thị thông báo lỗi
+                Toast.makeText(context,
+                        "Không thể thêm vào giỏ hàng",
+                        Toast.LENGTH_SHORT).show();
+
+                Log.e(TAG, "Lỗi khi thêm sản phẩm vào giỏ: " + product.getName());
+            }
+        } catch (Exception e) {
+            Toast.makeText(context,
+                    "Lỗi: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+
+            Log.e(TAG, "Exception khi thêm vào giỏ hàng: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Cập nhật số lượng hiển thị trên icon giỏ hàng
+     */
+    private void updateCartBadge() {
+        try {
+            // Lấy số lượng sản phẩm trong giỏ hàng
+            int itemCount = cartController.getCartItemCount();
+
+            // Tìm TextView hiển thị số lượng trong MainActivity
+            TextView cartBadge = ((android.app.Activity) context).findViewById(R.id.cartBadge);
+            if (cartBadge != null) {
+                cartBadge.setText(String.valueOf(itemCount));
+
+                // Hiển thị badge nếu có sản phẩm trong giỏ hàng, ẩn nếu không có
+                if (itemCount > 0) {
+                    cartBadge.setVisibility(View.VISIBLE);
+
+                    // Đặt background màu đỏ cho badge
+                    cartBadge.setBackgroundResource(R.drawable.cart_badge_background);
+
+                    // Đặt padding để hiển thị tốt hơn
+                    int padding = (int) (4 * context.getResources().getDisplayMetrics().density);
+                    cartBadge.setPadding(padding, 0, padding, 0);
+
+                    // Đặt style cho text
+                    cartBadge.setTextColor(Color.WHITE);
+                    cartBadge.setTypeface(null, Typeface.BOLD);
+                    cartBadge.setGravity(Gravity.CENTER);
+                } else {
+                    cartBadge.setVisibility(View.GONE);
+                }
+            }
+
+            Log.d(TAG, "Đã cập nhật badge giỏ hàng: " + itemCount + " sản phẩm");
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi cập nhật badge giỏ hàng: " + e.getMessage());
         }
     }
 

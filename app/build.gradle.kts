@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -40,4 +41,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    // Sử dụng BOM để tự động đồng bộ phiên bản Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+
+    // Firebase Authentication
+    implementation("com.google.firebase:firebase-auth")
+
+    // Firebase Database
+    implementation("com.google.firebase:firebase-database")
+
+    // Fix lỗi Firebase App Check
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+
+    // Google Play Services (cần thiết để Firebase hoạt động)
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
 }

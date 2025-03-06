@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">group1_petfood</string>
+    <string name="ggmap_api_key">AIzaSyChEVDv7M0llS3LwJguvja3fAlUccCcdjY</string>
 </resources>

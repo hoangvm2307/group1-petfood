@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

@@ -1,3 +1,14 @@
+import java.util.Properties
+
+
+// Load API key safely
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+val MAPS_API_KEY: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -12,6 +23,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["MAPS_API_KEY"] = MAPS_API_KEY
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

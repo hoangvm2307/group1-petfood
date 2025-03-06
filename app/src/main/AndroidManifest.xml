@@ -23,7 +23,7 @@
         <!-- Lay string api cho google map -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/ggmap_api_key" />
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".activities.MainActivity"

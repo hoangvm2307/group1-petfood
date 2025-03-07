@@ -157,6 +157,12 @@ public class MainActivity extends AppCompatActivity {
     private void setupNavigationDrawer() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_product_management) {
+                Intent intent = new Intent(MainActivity.this, AdminProductActivity.class);
+                startActivity(intent);
+            }
             // Handle navigation item clicks
             drawerLayout.closeDrawers();
             return true;

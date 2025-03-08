@@ -10,24 +10,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/textViewCategoryName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Category Name"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <!-- ImageView hiển thị icon của category -->
+        <ImageView
+            android:id="@+id/imageViewCategory"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="12dp"/>
 
-        <TextView
-            android:id="@+id/textViewCategoryDescription"
-            android:layout_width="match_parent"
+        <!-- Layout chứa tên và mô tả danh mục -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Category Description"
-            android:textSize="14sp" />
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewCategoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category Name"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewCategoryDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Category Description"
+                android:textSize="14sp" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 

@@ -1,5 +1,6 @@
 package com.example.group1_petfood.controllers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import com.example.group1_petfood.database.DatabaseHelper;
 import com.example.group1_petfood.models.Category;
@@ -34,5 +35,31 @@ public class CategoryController {
         cursor.close();
         db.close();
         return categories;
+    }
+
+    public long addCategory(String name, String description, String imageUrl){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("description", description);
+        values.put("image_url", imageUrl);
+        long id = db.insert("categories", null, values);
+        db.close();
+        return id;
+    }
+
+    public int updateCategory(Category category){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", category.getName());
+        values.put("description", category.getDescription());
+        values.put("image_url", category.getImageUrl());
+        return db.update("categories", values, "id" + " = ?", new String[]{String.valueOf(category.getId())});
+    }
+
+    public void deleteCategory(int categoryId){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete("categories", "id" + " = ?", new String[]{String.valueOf(categoryId)});
+        db.close();
     }
 }

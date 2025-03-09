@@ -179,6 +179,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_call"/>
+             <!-- Test crud category -->
+            <!-- <Button
+                android:id="@+id/btnManageCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Categories"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"/> -->
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

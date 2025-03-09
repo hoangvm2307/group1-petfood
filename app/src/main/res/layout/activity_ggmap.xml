@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".activities.GgmapActivity"
+android:orientation="vertical">
+<!-- Google Map Fragment -->
+    <fragment
+    android:id="@+id/mapFragment"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"/>
+
+<!-- Address and Phone Number -->
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thông tin liên hệ"
+        android:textSize="20sp"
+        android:textColor="@color/green"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="10dp"
+        android:text="Địa chỉ: Số 7 Đường D1, Long Thạnh Mỹ, Thủ Đức, Hồ Chí Minh"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Phone: +1234567890"
+        android:textSize="16sp" />
+</LinearLayout>

@@ -112,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
 //        findViewById(R.id.chatButton).setOnClickListener(v -> openChat());
         findViewById(R.id.callButton).setOnClickListener(v -> openCartActivity());
         findViewById(R.id.cartButton).setOnClickListener(v -> openCartActivity());
+        findViewById(R.id.locationButton).setOnClickListener(v -> openGgmapActivity());
+    }
+
+    //change to the google map page
+    private void openGgmapActivity() {
+        Intent intent = new Intent(MainActivity.this, GgmapActivity.class);
+        startActivity(intent);
     }
     private void updateCartBadge() {
         try {

@@ -33,8 +33,9 @@ public class DatabaseInitializer {
             // Mở cơ sở dữ liệu để tạo các bảng
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             Log.d(TAG, "Cơ sở dữ liệu đã được khởi tạo thành công");
+ 
 
-
+ 
 //            clearAllCartItems();
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi khởi tạo cơ sở dữ liệu", e);

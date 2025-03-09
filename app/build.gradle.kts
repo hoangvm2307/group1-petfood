@@ -1,3 +1,14 @@
+import java.util.Properties
+
+
+// Load API key safely
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+val MAPS_API_KEY: String = localProperties.getProperty("MAPS_API_KEY") ?: ""
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
@@ -13,6 +24,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["MAPS_API_KEY"] = MAPS_API_KEY
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,14 +45,22 @@ android {
 }
 
 dependencies {
-
+ 
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
+ 
+    implementation ("com.squareup.picasso:picasso:2.8")
+ 
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("com.google.android.material:material:1.10.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+ 
     // Sử dụng BOM để tự động đồng bộ phiên bản Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
 
@@ -60,3 +80,6 @@ dependencies {
 
 
 }
+ 
+ 
+ 

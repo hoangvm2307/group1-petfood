@@ -112,6 +112,13 @@ public class MainActivity extends AppCompatActivity {
 //        findViewById(R.id.chatButton).setOnClickListener(v -> openChat());
         findViewById(R.id.callButton).setOnClickListener(v -> openCartActivity());
         findViewById(R.id.cartButton).setOnClickListener(v -> openCartActivity());
+        findViewById(R.id.locationButton).setOnClickListener(v -> openGgmapActivity());
+    }
+
+    //change to the google map page
+    private void openGgmapActivity() {
+        Intent intent = new Intent(MainActivity.this, GgmapActivity.class);
+        startActivity(intent);
     }
     private void updateCartBadge() {
         try {
@@ -157,6 +164,12 @@ public class MainActivity extends AppCompatActivity {
     private void setupNavigationDrawer() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_product_management) {
+                Intent intent = new Intent(MainActivity.this, AdminProductActivity.class);
+                startActivity(intent);
+            }
             // Handle navigation item clicks
             drawerLayout.closeDrawers();
             return true;

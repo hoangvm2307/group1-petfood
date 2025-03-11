@@ -56,6 +56,11 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("com.google.android.material:material:1.10.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(fileTree(mapOf(
+        "dir" to "D:\\Learning\\FPT Course\\PRM3932_2",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
@@ -76,7 +81,8 @@ dependencies {
     // Google Play Services (cần thiết để Firebase hoạt động)
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
-
+    implementation("com.squareup.okhttp3:okhttp:4.6.0")
+    implementation("commons-codec:commons-codec:1.14")
 
 
 }

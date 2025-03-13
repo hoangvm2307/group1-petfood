@@ -149,12 +149,6 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
                     Toast.makeText(GgmapActivity.this, "Liên hệ clicked", Toast.LENGTH_SHORT).show();
                 } else if (itemId == R.id.nav_distribution) {
                     Toast.makeText(GgmapActivity.this, "Hệ thống phân phối clicked", Toast.LENGTH_SHORT).show();
-                } else if (itemId == R.id.nav_phone) {
-                    Toast.makeText(GgmapActivity.this, "Phone: 02923744445 clicked", Toast.LENGTH_SHORT).show();
-                } else if (itemId == R.id.nav_email) {
-                    Toast.makeText(GgmapActivity.this, "Email: contact@keos.vn clicked", Toast.LENGTH_SHORT).show();
-                } else if (itemId == R.id.nav_product_management) {
-                    Toast.makeText(GgmapActivity.this, "Quản lý sản phẩm clicked", Toast.LENGTH_SHORT).show();
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);

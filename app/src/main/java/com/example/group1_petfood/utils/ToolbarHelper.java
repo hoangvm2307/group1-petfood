@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.group1_petfood.R;
 import com.example.group1_petfood.activities.GgmapActivity;
+import com.example.group1_petfood.activities.ProfileActivity;
 import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.fragments.CartDialogFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -60,7 +61,7 @@ public class ToolbarHelper {
         menuButton.setOnClickListener(v -> drawerLayout.open());
         cartButton.setOnClickListener(v -> openCartActivity());
         locationButton.setOnClickListener(v -> openGgmapActivity());
-        // Thêm listener cho profileButton nếu cần
+        profileButton.setOnClickListener(v -> openProfileActivity());
     }
 
     public void setupNavigationDrawer(NavigationView navigationView) {
@@ -120,5 +121,10 @@ public class ToolbarHelper {
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi cập nhật badge giỏ hàng: " + e.getMessage());
         }
+    }
+
+    private void openProfileActivity() {
+        Intent intent = new Intent(activity, ProfileActivity.class);
+        activity.startActivity(intent);
     }
 }

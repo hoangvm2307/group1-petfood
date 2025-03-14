@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,8 +33,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.group1_petfood.R;
 import com.example.group1_petfood.adapters.LocationAdapter;
+import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.fragments.CartDialogFragment;
 import com.example.group1_petfood.models.StoreLocation;
+import com.example.group1_petfood.utils.ToolbarHelper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,10 +57,12 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ImageButton menuButton;
-    private Spinner spinnerDistrict;
+    private AutoCompleteTextView spinnerDistrict;
     private RecyclerView recyclerViewLocations;
     private LocationAdapter locationAdapter;
     private List<StoreLocation> allLocations;
+    private ToolbarHelper toolbarHelper;
+    private CartController cartController;
     private List<StoreLocation> filteredLocations;
 
     @Override

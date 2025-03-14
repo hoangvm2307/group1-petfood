@@ -2,64 +2,63 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Quyền truy cập internet -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Quyền sử dụng vị trí cho Google Maps -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
-    <!-- Lay cac permission cho viec su dung google map -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
+    <!-- Quyền truy cập bộ nhớ -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Group1_petfood"
+        tools:targetApi="31">
 
-    android:supportsRtl="true"
-    android:theme="@style/Theme.Group1_petfood"
-    tools:targetApi="31">
-    <activity
-        android:name=".activities.ForgotPasswordActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activities.RegisterActivity"
-        android:exported="false" />
-    <activity
-        android:name=".activities.GgmapActivity"
-        android:exported="false" />
-    <!-- Lay string api cho google map -->
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="${MAPS_API_KEY}" />
+        <!-- Các Activity trong ứng dụng -->
+        <activity android:name=".activities.ForgotPasswordActivity" android:exported="false"/>
+        <activity android:name=".activities.RegisterActivity" android:exported="false"/>
+        <activity android:name=".activities.GgmapActivity" android:exported="false"/>
 
+        <!-- API Key cho Google Maps -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}"/>
 
-    <activity
-        android:name=".activities.MainActivity"
-        android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".activities.MainActivity" android:exported="true"/>
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        <activity
+            android:name=".activities.PaymentActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
 
-    </activity>
-    <activity
-        android:name=".activities.LoginActivity"
-        android:exported="true">
+            <!-- Intent Filter cho Deep Link từ ZaloPay -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="demozpdk" android:host="app"/>
+            </intent-filter>
+        </activity>
 
-    </activity>
+        <activity android:name=".activities.LoginActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    <!-- <activity android:name=".activities.CategoryListActivity" /> -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.CategoryListActivity" android:exported="true"/>
+        <activity android:name=".activities.AdminProductActivity" android:exported="true"/>
+        <activity android:name=".activities.AddEditProductActivity"/>
+        <activity android:name=".activities.ProductDetailActivity"/>
 
-    <activity android:name=".activities.AdminProductActivity" />
-    <activity android:name=".activities.AddEditProductActivity" />
-    <activity android:name=".activities.ProductDetailActivity" />
-
-</application>
+    </application>
 
 </manifest>

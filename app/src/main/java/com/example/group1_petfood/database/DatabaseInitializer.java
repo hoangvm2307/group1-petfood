@@ -35,7 +35,7 @@ public class DatabaseInitializer {
             Log.d(TAG, "Cơ sở dữ liệu đã được khởi tạo thành công");
  
 
- 
+//            insertSampleData();
 //            clearAllCartItems();
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi khởi tạo cơ sở dữ liệu", e);

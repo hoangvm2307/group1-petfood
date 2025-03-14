@@ -61,16 +61,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:textColor="@color/black"
+                android:textColor="#FF0101"
                 android:textStyle="bold"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/addToCartButton"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:text="Thêm vào giỏ"
-                android:textColor="@color/white"
-                android:background="@drawable/cart_button_background"
+                android:textColor="@color/black"
+                android:drawableLeft="@drawable/ic_shopping_cart"
+                android:drawablePadding="0dp"
+                android:background="@android:color/transparent"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
     </RelativeLayout>

@@ -1,38 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="20dp"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     tools:context=".activities.RegisterActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đăng ký tài khoản"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/green"/>
+
+    <EditText
+        android:id="@+id/usernameRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="Tên đăng nhập"
+        android:inputType="text"
+        android:padding="15dp"
+        android:background="@drawable/edit_text_background"/>
+
+    <EditText
+        android:id="@+id/fullNameRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="Họ và tên"
+        android:inputType="textPersonName"
+        android:padding="15dp"
+        android:background="@drawable/edit_text_background"/>
+
     <EditText
         android:id="@+id/emailRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:padding="15dp"
+        android:background="@drawable/edit_text_background"/>
 
     <EditText
         android:id="@+id/passwordRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:hint="Mật khẩu"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:background="@drawable/edit_text_background"/>
 
     <EditText
         android:id="@+id/confirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:hint="Nhập lại mật khẩu"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:background="@drawable/edit_text_background"/>
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Đăng ký" />
+        android:text="Đăng ký"
+        android:textSize="16sp"
+        android:padding="15dp"
+        android:textColor="@color/white"
+        android:background="@drawable/checkout_button_background"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đã có tài khoản? Đăng nhập"
+        android:textColor="@color/green"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"/>
+
 </LinearLayout>

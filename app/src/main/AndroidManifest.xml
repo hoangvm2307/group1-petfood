@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Lay cac permission cho viec su dung google map -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- Quyền truy cập internet -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Quyền sử dụng vị trí cho Google Maps -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Quyền truy cập bộ nhớ -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
@@ -16,6 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Group1_petfood"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false" /> <!-- Các Activity trong ứng dụng -->
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false" />
@@ -42,6 +52,21 @@
             android:name=".activities.LoginActivity"
             android:exported="true"></activity> <!-- <activity android:name=".activities.CategoryListActivity" /> -->/
         <activity android:name=".activities.AdminProductActivity" />
+
+            <!-- Intent Filter cho Deep Link từ ZaloPay -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        <activity
+            android:name=".activities.CategoryListActivity"
+            android:exported="true" />
         <activity android:name=".activities.AddEditProductActivity" />
         <activity android:name=".activities.ProductDetailActivity" />
     </application>

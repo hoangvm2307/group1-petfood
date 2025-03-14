@@ -70,11 +70,14 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ggmap);
 
+        cartController = new CartController(this);
+
+        toolbarHelper = new ToolbarHelper(this, drawerLayout, cartController);
         drawerLayout = findViewById(R.id.drawerLayout);
         navigationView = findViewById(R.id.navigationView);
         menuButton = findViewById(R.id.menuButton);
         findViewById(R.id.cartButton).setOnClickListener(v -> openCartActivity());
-
+        toolbarHelper.updateCartBadge();
         menuButton.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         spinnerDistrict = findViewById(R.id.spinner_district);

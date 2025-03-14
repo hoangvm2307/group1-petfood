@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity implements UserOrderAdapt
     private DrawerLayout drawerLayout;
     private CartController cartController;
 
+
     private static final int MAX_ORDERS_TO_SHOW = 3; // Số lượng đơn hàng hiển thị trên trang profile
 
     @Override
@@ -65,12 +66,13 @@ public class ProfileActivity extends AppCompatActivity implements UserOrderAdapt
         userController = new UserController(this);
         orderController = new OrderController(this);
         cartController = new CartController(this);
+
     }
 
     private void initializeViews() {
         drawerLayout = findViewById(R.id.drawer_layout);
         toolbarHelper = new ToolbarHelper(this, drawerLayout, cartController);
-
+        toolbarHelper.updateCartBadge();
         tvUsername = findViewById(R.id.tvUsername);
         tvFullName = findViewById(R.id.tvFullName);
         tvEmail = findViewById(R.id.tvEmail);

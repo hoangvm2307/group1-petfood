@@ -94,7 +94,7 @@
                             android:background="#F5F5F5"
                             android:clipToPadding="false"
                             android:padding="8dp"
-                            android:nestedScrollingEnabled="false"/>
+                            android:nestedScrollingEnabled="true"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

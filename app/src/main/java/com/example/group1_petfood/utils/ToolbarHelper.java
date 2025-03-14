@@ -69,10 +69,10 @@ public class ToolbarHelper {
             int id = item.getItemId();
 
             // Xử lý các item trong navigation menu
-            if (id == R.id.nav_product_management) {
-                Intent intent = new Intent(activity, com.example.group1_petfood.activities.AdminProductActivity.class);
-                activity.startActivity(intent);
-            }
+//            if (id == R.id.nav_product_management) {
+//                Intent intent = new Intent(activity, com.example.group1_petfood.activities.AdminProductActivity.class);
+//                activity.startActivity(intent);
+//            }
 
             drawerLayout.closeDrawers();
             return true;

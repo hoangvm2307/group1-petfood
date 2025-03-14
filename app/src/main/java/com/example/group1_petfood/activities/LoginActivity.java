@@ -68,12 +68,12 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
         // Kiểm tra người dùng đã đăng nhập chưa
-        if (isLoggedIn()) {
-            // Chuyển đến MainActivity nếu người dùng đã đăng nhập
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-            return;
-        }
+//        if (isLoggedIn()) {
+//            // Chuyển đến MainActivity nếu người dùng đã đăng nhập
+//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//            finish();
+//            return;
+//        }
 
         // Ánh xạ UI components
         emailLogin = findViewById(R.id.emailLogin);

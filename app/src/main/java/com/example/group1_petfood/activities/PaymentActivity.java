@@ -15,6 +15,7 @@ import com.example.group1_petfood.R;
 import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.controllers.OrderController;
 import com.example.group1_petfood.models.CartItem;
+import com.example.group1_petfood.utils.UserUtils;
 import com.example.group1_petfood.zalopay.Api.CreateOrder;
 
 import org.json.JSONObject;
@@ -151,13 +152,14 @@ public class PaymentActivity extends AppCompatActivity {
     // Phương thức tạo đơn hàng mới
     private void createNewOrder() {
         try {
+            int userId = UserUtils.getCurrentUserId(this);
             // Lấy thời gian hiện tại
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             String currentTime = sdf.format(new Date());
 
             // Tạo đơn hàng mới
             long orderId = orderController.addOrder(
-                    DEFAULT_USER_ID,
+                    userId,
                     totalAmount,
                     "Địa chỉ mặc định", // Có thể thay đổi để lấy từ người dùng
                     "Đã thanh toán", // Trạng thái đơn hàng

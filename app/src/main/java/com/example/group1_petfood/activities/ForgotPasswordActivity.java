@@ -1,9 +1,11 @@
 package com.example.group1_petfood.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText emailReset;
     private Button btnResetPassword;
+    private TextView tvAlreadyAccount, tvRegisterAccount;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         emailReset = findViewById(R.id.emailReset);
         btnResetPassword = findViewById(R.id.btnResetPassword);
+        tvAlreadyAccount = findViewById(R.id.tvAlreadyAccount_forgot);
+        tvRegisterAccount = findViewById(R.id.tvRegister_forgot);
 
+        tvAlreadyAccount.setOnClickListener(v -> startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class)));
+        tvRegisterAccount.setOnClickListener(v -> startActivity(new Intent(ForgotPasswordActivity.this, RegisterActivity.class)));
         btnResetPassword.setOnClickListener(v -> resetPassword());
     }
 

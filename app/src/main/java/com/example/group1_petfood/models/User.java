@@ -5,14 +5,44 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String fullName;
+    private String lastName;
+    private String firstName;
+
     private String phone;
+    private String gender;
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    private String birthDate;
+
     private String address;
     private String createdAt;
     private String updatedAt;
 
     // Constructor
     public User() {}
+
+    public User(String lastName, String firstName, String gender, String birthDate, String email) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.email = email;
+    }
 
     // Getters and Setters
     public int getId() { return id; }
@@ -27,8 +57,21 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }

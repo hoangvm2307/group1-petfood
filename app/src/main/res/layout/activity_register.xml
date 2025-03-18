@@ -9,30 +9,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     tools:context=".activities.RegisterActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="    Đăng ký"
+        android:textSize="45dp"
+        android:textStyle="bold" />
+    <!-- Họ -->
+    <EditText
+        android:id="@+id/lastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Họ"/>
+
+    <!-- Tên -->
+    <EditText
+        android:id="@+id/firstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tên"/>
+
+    <!-- Giới tính -->
+    <RadioGroup
+        android:id="@+id/genderGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nam" />
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nữ" />
+    </RadioGroup>
+
+    <!-- Ngày sinh -->
+    <EditText
+        android:id="@+id/birthDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="mm/dd/yyyy"
+        android:inputType="date"/>
     <EditText
         android:id="@+id/emailRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint=" Vui lòng nhập email của bạn "
+        android:textStyle="italic"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/passwordRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Mật khẩu"
-        android:inputType="textPassword" />
+        android:hint=" Vui lòng nhập mật khẩu"
+        android:textStyle="italic"
+        android:inputType="textPassword"/>
 
     <EditText
         android:id="@+id/confirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nhập lại mật khẩu"
+        android:hint=" Vui lòng lại mật khẩu"
+        android:textStyle="italic"
         android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Đăng ký" />
+        android:text="Đăng ký"
+        android:backgroundTint="#008E0A"
+        android:textColor="@android:color/white"/>
+    <!-- Already have account -->
+    <TextView
+        android:id="@+id/tvAlreadyAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bạn đã có tài khoản? Đăng nhập ngay"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"/>
 </LinearLayout>

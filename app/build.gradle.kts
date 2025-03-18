@@ -66,6 +66,7 @@ dependencies {
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
     )))
+    implementation(libs.gridlayout)
 
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")

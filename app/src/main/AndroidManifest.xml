@@ -73,6 +73,7 @@
             android:name=".activities.CategoryListActivity"
             android:exported="true" />
         <activity android:name=".activities.AddEditProductActivity" />
+        <activity android:name=".activities.AdminDashboardActivity" />
         <activity
             android:name=".activities.UserProductDetailActivity"
             android:exported="false" />

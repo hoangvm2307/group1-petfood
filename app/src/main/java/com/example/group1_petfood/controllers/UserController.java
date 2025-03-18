@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.group1_petfood.database.DatabaseHelper;
+import com.example.group1_petfood.models.Product;
 import com.example.group1_petfood.models.User;
 
 import java.util.ArrayList;
@@ -278,5 +279,9 @@ public class UserController {
      */
     private String getCurrentTimestamp() {
         return java.text.DateFormat.getDateTimeInstance().format(new java.util.Date());
+    }
+    public int getUserCount() {
+        List<User> users = getAllUsers();
+        return users.size();
     }
 }

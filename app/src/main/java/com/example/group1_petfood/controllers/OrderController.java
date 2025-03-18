@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.group1_petfood.database.DatabaseHelper;
 import com.example.group1_petfood.models.Order;
+import com.example.group1_petfood.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,5 +78,9 @@ public class OrderController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("orders", "id = ?", new String[]{String.valueOf(orderId)});
         db.close();
+    }
+    public int getOrderCount() {
+        List<Order> orders = getAllOrders();
+        return orders.size();
     }
 }

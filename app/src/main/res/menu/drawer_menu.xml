@@ -47,9 +47,6 @@
                 android:icon="@drawable/ic_email"
                 android:title="contact@keos.vn" />
 
-            <item
-                android:id="@+id/nav_product_management"
-                android:title="Quản lý sản phẩm"/>
         </menu>
     </item>
 </menu>

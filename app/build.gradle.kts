@@ -67,6 +67,7 @@ dependencies {
         "exclude" to listOf("")
     )))
     implementation(libs.gridlayout)
+    implementation(files("C:\\Users\\zubek\\Downloads\\zpdk-release-v3.1.aar"))
 
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")

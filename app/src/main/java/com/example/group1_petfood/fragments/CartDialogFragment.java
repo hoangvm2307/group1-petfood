@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,20 +25,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.group1_petfood.R;
-import com.example.group1_petfood.activities.PaymentActivity;
+import com.example.group1_petfood.activities.PaymentNotification;
 import com.example.group1_petfood.adapters.CartAdapter;
 import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.controllers.ProductController;
 import com.example.group1_petfood.models.Cart;
 import com.example.group1_petfood.models.CartItem;
 import com.example.group1_petfood.models.Product;
+import com.example.group1_petfood.zalopay.Api.CreateOrder;
 
+import org.json.JSONObject;
+
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class CartDialogFragment extends DialogFragment {
     private static final String TAG = "CartDialogFragment";
-    private static final int PAYMENT_REQUEST_CODE = 1001;
 
     private RecyclerView cartRecyclerView;
     private TextView totalPriceTextView;
@@ -66,7 +76,10 @@ public class CartDialogFragment extends DialogFragment {
         // Khởi tạo controllers
         cartController = new CartController(requireContext());
         productController = new ProductController(requireContext());
-
+        StrictMode.ThreadPolicy policy = new
+                StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
         // Khởi tạo views
         initializeViews(view);
 
@@ -135,6 +148,7 @@ public class CartDialogFragment extends DialogFragment {
                 Product product = productController.getProductById(cart.getProductId());
 
                 if (product != null) {
+
                     CartItem cartItem = new CartItem(cart, product);
                     cartItems.add(cartItem);
 
@@ -146,6 +160,7 @@ public class CartDialogFragment extends DialogFragment {
 
             // Hiển thị danh sách sản phẩm
             if (cartItems.isEmpty()) {
+
                 showEmptyCart();
             } else {
                 showCartItems();
@@ -178,36 +193,54 @@ public class CartDialogFragment extends DialogFragment {
     private void setupClickListeners() {
         // Nút đóng
         closeButton.setOnClickListener(v -> dismiss());
-
-        // Nút thanh toán - chuyển sang PaymentActivity
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String totalString = String.format("%.0f", totalPrice);
+        // Nút thanh toán
         checkoutButton.setOnClickListener(v -> {
             if (cartItems.isEmpty()) {
                 Toast.makeText(requireContext(), "Giỏ hàng của bạn đang trống", Toast.LENGTH_SHORT).show();
             } else {
-                // Chuyển đến màn hình thanh toán
-                Intent intent = new Intent(requireContext(), PaymentActivity.class);
-                intent.putExtra("total_amount", totalPrice);
-                startActivityForResult(intent, PAYMENT_REQUEST_CODE);
+                Toast.makeText(requireContext(), "Đang chuyển đến thanh toán...", Toast.LENGTH_SHORT).show();
+                CreateOrder orderApi = new CreateOrder();
+                try {
+                    JSONObject data = orderApi.createOrder(totalString);
+                    String code = data.getString("return_code");
 
-                // Đóng dialog giỏ hàng
+                    String totalFormatted = String.format("%,.0f₫", totalPrice); // Định dạng tổng tiền
+
+                    if (code.equals("1")) {
+                        String token = data.getString("zp_trans_token");
+                        ZaloPaySDK.getInstance().payOrder(getActivity(), token, "demozpdk://app", new PayOrderListener() {
+                            @Override
+                            public void onPaymentSucceeded(String s, String s1, String s2) {
+                                Intent intent1 = new Intent(requireContext(), PaymentNotification.class);
+                                intent1.putExtra("result", "Thanh toán thành công");
+                                intent1.putExtra("total", "Bạn đã thanh toán " + totalFormatted);
+                                startActivity(intent1);
+                            }
+
+                            @Override
+                            public void onPaymentCanceled(String s, String s1) {
+                                Intent intent2 = new Intent(requireContext(), PaymentNotification.class);
+                                intent2.putExtra("result", "Thanh toán đã được hủy");
+                                startActivity(intent2);
+                            }
+
+                            @Override
+                            public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                                Intent intent3 = new Intent(requireContext(), PaymentNotification.class);
+                                intent3.putExtra("result", "Lỗi thanh toán");
+                                startActivity(intent3);
+                            }
+                        });
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 dismiss();
             }
         });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PAYMENT_REQUEST_CODE) {
-            if (resultCode == getActivity().RESULT_OK) {
-                // Thanh toán thành công - giỏ hàng đã được xử lý trong PaymentActivity
-                Log.d(TAG, "Thanh toán thành công, đơn hàng đã được tạo và giỏ hàng đã bị xóa");
-            } else {
-                // Thanh toán bị hủy hoặc thất bại
-                Log.d(TAG, "Thanh toán không thành công");
-            }
-        }
     }
 
     public void updateCartItemQuantity(int position, int quantity) {
@@ -262,7 +295,18 @@ public class CartDialogFragment extends DialogFragment {
                 }
 
                 // Cập nhật badge giỏ hàng ở MainActivity
-                updateCartBadge();
+                if (getActivity() != null) {
+                    TextView cartBadge = getActivity().findViewById(R.id.cartBadge);
+                    if (cartBadge != null) {
+                        int itemCount = cartController.getCartItemCount();
+                        if (itemCount > 0) {
+                            cartBadge.setText(String.valueOf(itemCount));
+                            cartBadge.setVisibility(View.VISIBLE);
+                        } else {
+                            cartBadge.setVisibility(View.GONE);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi xóa sản phẩm: " + e.getMessage());
@@ -277,21 +321,5 @@ public class CartDialogFragment extends DialogFragment {
             totalPrice += itemPrice;
         }
         totalPriceTextView.setText(String.format("%,.0f₫", totalPrice));
-    }
-
-    // Cập nhật badge giỏ hàng
-    private void updateCartBadge() {
-        if (getActivity() != null) {
-            TextView cartBadge = getActivity().findViewById(R.id.cartBadge);
-            if (cartBadge != null) {
-                int itemCount = cartController.getCartItemCount();
-                if (itemCount > 0) {
-                    cartBadge.setText(String.valueOf(itemCount));
-                    cartBadge.setVisibility(View.VISIBLE);
-                } else {
-                    cartBadge.setVisibility(View.GONE);
-                }
-            }
-        }
     }
 }

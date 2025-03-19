@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.group1_petfood.R;
-import com.example.group1_petfood.activities.UserProductDetailActivity;
 import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.models.Product;
 
@@ -113,10 +112,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             });
 
             holder.itemView.setOnClickListener(v -> {
+                // Xử lý khi click vào sản phẩm
                 Log.d(TAG, "Xem chi tiết sản phẩm: " + product.getName());
-                 Intent intent = new Intent(context, UserProductDetailActivity.class);
-                 intent.putExtra("product_id", product.getId());
-                 context.startActivity(intent);
+                // Tạm thời bỏ comment vì chưa có ProductDetailActivity
+                // Intent intent = new Intent(context, ProductDetailActivity.class);
+                // intent.putExtra("product_id", product.getId());
+                // context.startActivity(intent);
             });
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi hiển thị sản phẩm: " + e.getMessage());

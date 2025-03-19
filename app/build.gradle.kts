@@ -61,14 +61,7 @@ dependencies {
         "include" to listOf("*.aar", "*.jar"),
         "exclude" to listOf("")
     )))
-    implementation(fileTree(mapOf(
-        "dir" to "C:\\Users\\Asus\\Desktop\\ZaloPayLib",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
-    )))
-    implementation(libs.gridlayout)
-
-
+    implementation(files("D:\\FPT\\SPR2025\\PRM392\\zpdk-release-v3.1.aar"))
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

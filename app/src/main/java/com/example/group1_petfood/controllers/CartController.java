@@ -9,7 +9,6 @@ import android.util.Log;
 import com.example.group1_petfood.database.DatabaseHelper;
 import com.example.group1_petfood.models.Cart;
 import com.example.group1_petfood.models.Product;
-import com.example.group1_petfood.utils.UserUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +33,9 @@ public class CartController {
      * @return true nếu thêm thành công, false nếu thất bại
      */
     public boolean addToCart(int productId, int quantity) {
-        return addToCart(UserUtils.getCurrentUserId(context), productId, quantity);
+        return addToCart(DEFAULT_USER_ID, productId, quantity);
     }
+
     /**
      * Thêm sản phẩm vào giỏ hàng của một người dùng cụ thể
      * @param userId ID của người dùng
@@ -101,7 +101,7 @@ public class CartController {
      * @return true nếu xóa thành công, false nếu thất bại
      */
     public boolean removeFromCart(int productId) {
-        return removeFromCart(UserUtils.getCurrentUserId(context), productId);
+        return removeFromCart(DEFAULT_USER_ID, productId);
     }
 
     /**
@@ -139,7 +139,7 @@ public class CartController {
      * @return true nếu cập nhật thành công, false nếu thất bại
      */
     public boolean updateCartItemQuantity(int productId, int quantity) {
-        return updateCartItemQuantity(UserUtils.getCurrentUserId(context), productId, quantity);
+        return updateCartItemQuantity(DEFAULT_USER_ID, productId, quantity);
     }
 
     /**
@@ -180,7 +180,7 @@ public class CartController {
      * @return Danh sách các đối tượng Cart
      */
     public List<Cart> getCartItems() {
-        return getCartItems(UserUtils.getCurrentUserId(context));
+        return getCartItems(DEFAULT_USER_ID);
     }
 
     /**
@@ -228,8 +228,9 @@ public class CartController {
      * @return Số lượng sản phẩm trong giỏ hàng
      */
     public int getCartItemCount() {
-        return getCartItemCount(UserUtils.getCurrentUserId(context));
+        return getCartItemCount(DEFAULT_USER_ID);
     }
+
     /**
      * Đếm số lượng sản phẩm trong giỏ hàng của một người dùng cụ thể
      * @param userId ID của người dùng
@@ -264,7 +265,7 @@ public class CartController {
      * @return Tổng giá trị giỏ hàng
      */
     public double getCartTotal() {
-        return getCartTotal(UserUtils.getCurrentUserId(context));
+        return getCartTotal(DEFAULT_USER_ID);
     }
 
     /**
@@ -303,8 +304,9 @@ public class CartController {
      * @return true nếu xóa thành công, false nếu thất bại
      */
     public boolean clearCart() {
-        return clearCart(UserUtils.getCurrentUserId(context));
+        return clearCart(DEFAULT_USER_ID);
     }
+
     /**
      * Xóa tất cả sản phẩm trong giỏ hàng của một người dùng cụ thể
      * @param userId ID của người dùng

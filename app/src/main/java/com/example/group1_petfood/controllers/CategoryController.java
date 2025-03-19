@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import com.example.group1_petfood.database.DatabaseHelper;
 import com.example.group1_petfood.models.Category;
-import com.example.group1_petfood.models.Product;
-
 import java.util.ArrayList;
 import java.util.List;
 import android.database.Cursor;
@@ -63,9 +61,5 @@ public class CategoryController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("categories", "id" + " = ?", new String[]{String.valueOf(categoryId)});
         db.close();
-    }
-    public int getCategoryCount() {
-        List<Category> categories = getAllCategories();
-        return categories.size();
     }
 }

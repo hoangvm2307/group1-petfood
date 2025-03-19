@@ -143,8 +143,4 @@ public class ProductController {
         db.close();
         return result > 0;
     }
-    public int getProductCount() {
-        List<Product> products = getAllProducts();
-        return products.size();
-    }
 }

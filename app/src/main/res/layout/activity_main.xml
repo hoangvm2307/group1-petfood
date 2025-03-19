@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
@@ -12,7 +11,90 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/toolbar_layout" android:id="@+id/included_toolbar"/>
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/menuButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"/>
+
+                    <ImageView
+                        android:id="@+id/logoImage"
+                        android:layout_width="80dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/logo"
+                        android:layout_marginStart="16dp"/>
+
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="16dp"
+
+                        app:queryHint="Tìm kiếm sản phẩm..."/>
+
+                    <ImageButton
+                        android:id="@+id/locationButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_location"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"/>
+
+                    <ImageButton
+                        android:id="@+id/profileButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_person"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="8dp"/>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        
+                        <ImageButton
+                            android:id="@+id/cartButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_shopping_cart"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="8dp"/>
+
+                        <TextView
+                            android:id="@+id/cartBadge"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:layout_alignTop="@id/cartButton"
+                            android:layout_alignEnd="@id/cartButton"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -24,71 +106,50 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Banner section with compact layout -->
-                <RelativeLayout
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/bannerViewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="200dp"/>
 
-                    <!-- Banner ViewPager -->
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/bannerViewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"/>
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/bannerIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                    <!-- Banner Indicator at the bottom of the banner -->
-                    <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/bannerIndicator"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/bannerViewPager"
-                        android:background="@android:color/transparent"
-                        app:tabGravity="center"
-                        app:tabIndicatorHeight="0dp"
-                        app:tabBackground="@drawable/tab_selector"
-                        app:tabPaddingStart="4dp"
-                        app:tabPaddingEnd="4dp"
-                        android:layout_marginBottom="8dp"/>
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"/>
 
-                </RelativeLayout>
+                <!-- Quick Actions -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/quickActionsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"/>
 
-                <!-- Categories Header (Added directly below banner) -->
+                <!-- Categories -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Danh mục sản phẩm"
                     android:textColor="@color/green"
                     android:textSize="20sp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="4dp"/>
+                    android:padding="16dp"/>
 
-                <!-- Categories -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/categoriesRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="8dp"/>
 
-                <!-- Quick Actions (Moved after categories) -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/quickActionsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"/>
-
-                <!-- Featured Products Header -->
+                <!-- Products -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sản phẩm nổi bật"
                     android:textColor="@color/green"
                     android:textSize="20sp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="4dp"/>
+                    android:padding="16dp"/>
 
-                <!-- Products -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/productsRecyclerView"
                     android:layout_width="match_parent"
@@ -118,6 +179,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_call"/>
+             <!-- Test crud category -->
+            <!-- <Button
+                android:id="@+id/btnManageCategories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Categories"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"/> -->
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -127,9 +196,5 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/white"
-        app:menu="@menu/drawer_menu"
-        app:headerLayout="@layout/nav_header"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"/>
+        app:menu="@menu/drawer_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -1,50 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_home"
-        android:title="Trang chủ" />
-
-    <item
-        android:id="@+id/nav_about"
-        android:title="Giới thiệu về Keos" />
-
-    <item
-        android:id="@+id/nav_products"
-        android:title="Sản phẩm"
-        android:icon="@drawable/ic_arrow_right" />
-
-    <item
-        android:id="@+id/nav_blog"
-        android:title="Blog"
-        android:icon="@drawable/ic_arrow_right" />
-
-    <item
-        android:id="@+id/nav_contact"
-        android:title="Liên hệ" />
-
-    <item
-        android:id="@+id/nav_distribution"
-        android:title="Hệ thống phân phối" />
-
-    <group android:id="@+id/group_help">
+    <group android:id="@+id/group_main">
         <item
-            android:id="@+id/nav_help"
-            android:title="BẠN CẦN HỖ TRỢ?"
-            android:enabled="false"
-            android:textStyle="bold"
-            android:textColor="#209381" />
+            android:id="@+id/nav_home"
+            android:title="Trang chủ" />
 
         <item
-            android:id="@+id/nav_phone"
-            android:icon="@drawable/ic_call"
-            android:title="02923744445" />
+            android:id="@+id/nav_about"
+            android:title="Giới thiệu về Keos" />
 
         <item
-            android:id="@+id/nav_email"
-            android:icon="@drawable/ic_email"
-            android:title="contact@keos.vn" />
+            android:id="@+id/nav_products"
+            android:title="Sản phẩm">
+            <menu>
+                <item
+                    android:id="@+id/nav_dog_food"
+                    android:title="Thức ăn cho chó" />
+                <item
+                    android:id="@+id/nav_cat_food"
+                    android:title="Thức ăn cho mèo" />
+            </menu>
+        </item>
+
         <item
-            android:id="@+id/nav_product_management"
-            android:title="Quản lý sản phẩm"/>
+            android:id="@+id/nav_blog"
+            android:title="Blog" />
+
+        <item
+            android:id="@+id/nav_contact"
+            android:title="Liên hệ" />
+
+        <item
+            android:id="@+id/nav_distribution"
+            android:title="Hệ thống phân phối" />
     </group>
+
+    <item android:title="Hỗ trợ">
+        <menu>
+            <item
+                android:id="@+id/nav_phone"
+                android:icon="@drawable/ic_call"
+                android:title="02923744445" />
+
+            <item
+                android:id="@+id/nav_email"
+                android:icon="@drawable/ic_email"
+                android:title="contact@keos.vn" />
+
+        </menu>
+    </item>
 </menu>

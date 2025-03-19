@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.group1_petfood.R;
 import com.example.group1_petfood.controllers.UserController;
 import com.example.group1_petfood.models.User;
+import com.example.group1_petfood.models.UserRole;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -32,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // Khởi tạo Firebase Auth (giữ nguyên để tương thích với mã hiện tại)
+        // Khởi tạo Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         // Khởi tạo UserController để lưu người dùng vào SQLite
@@ -42,11 +43,11 @@ public class RegisterActivity extends AppCompatActivity {
         emailRegister = findViewById(R.id.emailRegister);
         passwordRegister = findViewById(R.id.passwordRegister);
         confirmPassword = findViewById(R.id.confirmPassword);
-        usernameRegister = findViewById(R.id.usernameRegister); // Cần thêm vào layout
-        fullNameRegister = findViewById(R.id.fullNameRegister); // Cần thêm vào layout
+        usernameRegister = findViewById(R.id.usernameRegister);
+        fullNameRegister = findViewById(R.id.fullNameRegister);
         btnRegister = findViewById(R.id.btnRegister);
-        tvLogin = findViewById(R.id.tvLogin); // Cần thêm vào layout
-        progressBar = findViewById(R.id.progressBar); // Cần thêm vào layout
+        tvLogin = findViewById(R.id.tvLogin);
+        progressBar = findViewById(R.id.progressBar);
 
         btnRegister.setOnClickListener(v -> registerUser());
 
@@ -130,9 +131,11 @@ public class RegisterActivity extends AppCompatActivity {
         newUser.setPassword(password);
         newUser.setUsername(username);
         newUser.setFullName(fullName);
-        // Thêm một số thông tin mặc định hoặc để trống
+        // Thêm một số thông tin mặc định
         newUser.setPhone("");
         newUser.setAddress("");
+        // Đặt vai trò mặc định là CUSTOMER cho người dùng mới
+        newUser.setRole(UserRole.CUSTOMER);
 
         // Lưu thông tin vào cơ sở dữ liệu SQLite
         long userId = userController.registerUser(newUser);

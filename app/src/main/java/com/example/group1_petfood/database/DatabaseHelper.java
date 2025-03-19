@@ -8,7 +8,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "petfood_store.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // Tăng lên để trigger onUpgrade
 
     // Table Names
     private static final String TABLE_USERS = "users";
@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_UPDATED_AT = "updated_at";
 
-    // SQL Create Tables
+    // SQL Create Tables - Thêm cột role vào bảng users
     private static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS + " (" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "username TEXT UNIQUE NOT NULL, " +
@@ -35,8 +35,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "full_name TEXT NOT NULL, " +
             "phone TEXT, " +
             "address TEXT, " +
+            "role TEXT DEFAULT 'customer', " + // Thêm cột role với giá trị mặc định là 'customer'
             KEY_CREATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
             KEY_UPDATED_AT + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+
     private static final String CREATE_TABLE_CATEGORIES = "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORIES + " (" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT NOT NULL, " +
@@ -148,17 +150,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
 
-            // Drop all tables
-            String[] tables = { TABLE_USERS, TABLE_CATEGORIES, TABLE_PRODUCTS, TABLE_CART,
-                    TABLE_ORDERS, TABLE_ORDER_ITEMS, TABLE_STORE_LOCATIONS,
-                    TABLE_CHAT_MESSAGES, TABLE_NOTIFICATIONS };
-
-            for (String table : tables) {
-                db.execSQL("DROP TABLE IF EXISTS " + table);
+            if (oldVersion < 2) {
+                // Thêm cột role vào bảng users nếu chưa có
+                try {
+                    db.execSQL("ALTER TABLE " + TABLE_USERS + " ADD COLUMN role TEXT DEFAULT 'customer'");
+                    Log.d(TAG, "Added role column to users table");
+                } catch (Exception e) {
+                    Log.e(TAG, "Error adding role column: " + e.getMessage());
+                }
             }
 
-            // Create new tables
-            onCreate(db);
+            // Xử lý các version cao hơn trong tương lai
+            // if (oldVersion < 3) { ... }
         } catch (Exception e) {
             Log.e(TAG, "Error upgrading database", e);
         }
@@ -168,7 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void closeDB() {
         SQLiteDatabase db = this.getReadableDatabase();
         if (db != null && db.isOpen()) {
-            db.close();
+//            db.close();
         }
     }
 

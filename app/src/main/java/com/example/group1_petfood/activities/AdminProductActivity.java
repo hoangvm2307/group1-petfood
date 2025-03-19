@@ -19,32 +19,27 @@ public class AdminProductActivity extends AppCompatActivity implements AdminProd
     private RecyclerView recyclerView;
     private AdminProductAdapter adapter;
     private ProductController productController;
-    private FloatingActionButton btnAddProduct; // Change this line
+    private FloatingActionButton btnAddProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_product);
 
-        // Khởi tạo ProductController
         productController = new ProductController(this);
 
-        // Ánh xạ view
-        btnAddProduct = findViewById(R.id.btnAddProduct); // Correct casting
+        btnAddProduct = findViewById(R.id.btnAddProduct);
         recyclerView = findViewById(R.id.recyclerViewProducts);
 
-        // Thiết lập RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         loadProducts();
 
-        // Xử lý sự kiện thêm sản phẩm
         btnAddProduct.setOnClickListener(v -> {
             Intent intent = new Intent(AdminProductActivity.this, AddEditProductActivity.class);
             startActivity(intent);
         });
     }
 
-    // Tải danh sách sản phẩm
     private void loadProducts() {
         List<Product> products = productController.getAllProducts();
         adapter = new AdminProductAdapter(products, this);
@@ -62,7 +57,7 @@ public class AdminProductActivity extends AppCompatActivity implements AdminProd
     public void onDeleteProduct(Product product) {
         boolean isDeleted = productController.deleteProduct(product.getId());
         if (isDeleted) {
-            loadProducts(); // Cập nhật lại danh sách sau khi xóa
+            loadProducts();
         }
     }
 }

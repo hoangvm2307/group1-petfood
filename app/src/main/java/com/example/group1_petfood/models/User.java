@@ -8,11 +8,15 @@ public class User {
     private String fullName;
     private String phone;
     private String address;
+    private UserRole role; // Thêm thuộc tính role
     private String createdAt;
     private String updatedAt;
 
     // Constructor
-    public User() {}
+    public User() {
+        // Mặc định người dùng mới sẽ có vai trò CUSTOMER
+        this.role = UserRole.CUSTOMER;
+    }
 
     // Getters and Setters
     public int getId() { return id; }
@@ -35,6 +39,14 @@ public class User {
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
+
+    // Đặt role từ chuỗi
+    public void setRoleFromString(String roleStr) {
+        this.role = UserRole.fromString(roleStr);
+    }
 
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }

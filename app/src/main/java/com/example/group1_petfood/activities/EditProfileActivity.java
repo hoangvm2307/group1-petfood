@@ -73,12 +73,11 @@ public class EditProfileActivity extends AppCompatActivity {
         btnSaveChanges.setOnClickListener(v -> saveProfileChanges());
 
         btnCancel.setOnClickListener(v -> {
-            // Quay về trang Profile mà không lưu thay đổi
             finish();
         });
 
         btnChangePhoto.setOnClickListener(v -> {
-            // Tính năng này có thể phát triển sau
+
             Toast.makeText(this, "Tính năng đang được phát triển", Toast.LENGTH_SHORT).show();
         });
     }
@@ -103,30 +102,25 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // Lấy dữ liệu từ form
         String fullName = etFullName.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
         String address = etAddress.getText().toString().trim();
 
-        // Kiểm tra dữ liệu
         if (fullName.isEmpty()) {
             etFullName.setError("Họ và tên không được để trống");
             etFullName.requestFocus();
             return;
         }
 
-        // Cập nhật thông tin người dùng
         currentUser.setFullName(fullName);
         currentUser.setPhone(phone);
         currentUser.setAddress(address);
 
-        // Lưu vào cơ sở dữ liệu
         boolean success = userController.updateUser(currentUser);
 
         if (success) {
             Toast.makeText(this, "Cập nhật thông tin thành công.", Toast.LENGTH_SHORT).show();
 
-            // Quay về trang Profile
             Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

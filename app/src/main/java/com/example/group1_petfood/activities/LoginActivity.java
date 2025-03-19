@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.group1_petfood.R;
 import com.example.group1_petfood.controllers.UserController;
 import com.example.group1_petfood.models.User;
+import com.example.group1_petfood.models.UserRole;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.GetSignInIntentRequest;
 import com.google.android.gms.auth.api.identity.Identity;
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREF_NAME = "user_pref";
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
-
+    private static final String KEY_USER_ROLE = "user_role";
     private EditText emailLogin, passwordLogin;
     private Button btnLogin;
     private TextView tvRegister, tvForgotPassword;
@@ -57,32 +58,25 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        // Khởi tạo Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         signInClient = Identity.getSignInClient(this);
-
-        // Khởi tạo UserController
         userController = new UserController(this);
-
-        // Khởi tạo SharedPreferences để lưu trạng thái đăng nhập
         sharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 
-        // Kiểm tra người dùng đã đăng nhập chưa
-//        if (isLoggedIn()) {
-//            // Chuyển đến MainActivity nếu người dùng đã đăng nhập
-//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//            finish();
-//            return;
-//        }
-
-        // Ánh xạ UI components
         emailLogin = findViewById(R.id.emailLogin);
         passwordLogin = findViewById(R.id.passwordLogin);
         btnLogin = findViewById(R.id.btnLogin);
         tvRegister = findViewById(R.id.tvRegister);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
         btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
-        progressBar = findViewById(R.id.progressBar); // Thêm ProgressBar vào layout
+        progressBar = findViewById(R.id.progressBar);
+
+        userController.createDefaultAdminIfNeeded();
+
+        if (isLoggedIn()) {
+            redirectBasedOnRole();
+            return;
+        }
 
         btnLogin.setOnClickListener(v -> loginUser());
         tvRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
@@ -90,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogleSignIn.setOnClickListener(v -> signInWithGoogle());
     }
 
-    // Xử lý đăng nhập bằng Email & Mật khẩu
     private void loginUser() {
         String email = emailLogin.getText().toString().trim();
         String password = passwordLogin.getText().toString().trim();
@@ -100,25 +93,18 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Hiển thị progress bar
         progressBar.setVisibility(View.VISIBLE);
 
-        // Kiểm tra đăng nhập trong cơ sở dữ liệu SQLite
         User user = userController.checkLogin(email, password);
 
         if (user != null) {
-            // Đăng nhập thành công trong SQLite
-            saveLoginState(user.getId());
-
-            // Đăng nhập Firebase để duy trì tính nhất quán
-            loginWithFirebase(email, password);
+            saveLoginState(user.getId(), user.getRole());
+            redirectBasedOnRole();
         } else {
-            // Nếu không tìm thấy trong SQLite, thử đăng nhập bằng Firebase
             loginWithFirebase(email, password);
         }
     }
 
-    // Đăng nhập bằng Firebase
     private void loginWithFirebase(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -126,13 +112,15 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
-                    // Lưu trạng thái đăng nhập nếu chưa lưu từ SQLite
                     if (!isLoggedIn()) {
-                        saveLoginState(1); // Giả sử ID mặc định là 1 nếu không tìm thấy trong SQLite
+                        User dbUser = userController.checkLogin(email, password);
+                        if (dbUser != null) {
+                            saveLoginState(dbUser.getId(), dbUser.getRole());
+                        } else {
+                            saveLoginState(1, UserRole.CUSTOMER);
+                        }
                     }
-
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    redirectBasedOnRole();
                 }
             } else {
                 progressBar.setVisibility(View.GONE);
@@ -141,7 +129,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Xử lý đăng nhập bằng Google
     private void signInWithGoogle() {
         progressBar.setVisibility(View.VISIBLE);
 
@@ -180,27 +167,25 @@ public class LoginActivity extends AppCompatActivity {
                                 progressBar.setVisibility(View.GONE);
 
                                 if (task.isSuccessful()) {
-                                    // Đăng nhập Firebase thành công
                                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
 
-                                    // Kiểm tra và tạo tài khoản trong SQLite nếu chưa có
                                     if (!userController.isEmailExists(email)) {
                                         User newUser = new User();
                                         newUser.setEmail(email);
-                                        newUser.setUsername(email.split("@")[0]); // Tạo username từ email
+                                        newUser.setUsername(email.split("@")[0]);
                                         newUser.setFullName(credential.getDisplayName() != null ?
                                                 credential.getDisplayName() : email.split("@")[0]);
                                         newUser.setPassword("google_login"); // Mật khẩu giả
 
                                         long userId = userController.registerUser(newUser);
                                         if (userId != -1) {
-                                            saveLoginState((int) userId);
+                                            saveLoginState((int) userId, UserRole.CUSTOMER);
                                         }
                                     } else {
-                                        // Nếu đã tồn tại, lấy thông tin người dùng
                                         User existingUser = userController.checkLogin(email, "google_login");
                                         if (existingUser != null) {
-                                            saveLoginState(existingUser.getId());
+
+                                            saveLoginState(existingUser.getId(), existingUser.getRole());
                                         }
                                     }
 
@@ -219,15 +204,36 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Lưu trạng thái đăng nhập
-    private void saveLoginState(int userId) {
+    private void saveLoginState(int userId, UserRole role) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(KEY_USER_ID, userId);
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.putString(KEY_USER_ROLE, role.getRoleName());
         editor.apply();
     }
+    private void redirectBasedOnRole() {
+        progressBar.setVisibility(View.GONE);
 
-    // Kiểm tra trạng thái đăng nhập
+        String roleStr = sharedPreferences.getString(KEY_USER_ROLE, UserRole.CUSTOMER.getRoleName());
+        UserRole role = UserRole.fromString(roleStr);
+
+        Intent intent;
+
+        switch (role) {
+            case ADMIN:
+                intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+                break;
+            case STAFF:
+                intent = new Intent(LoginActivity.this, AdminProductActivity.class);
+                break;
+            default:
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                break;
+        }
+
+        startActivity(intent);
+        finish();
+    }
     private boolean isLoggedIn() {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false);
     }

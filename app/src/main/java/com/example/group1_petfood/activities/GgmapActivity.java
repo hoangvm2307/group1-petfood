@@ -83,14 +83,12 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
         spinnerDistrict = findViewById(R.id.spinner_district);
         recyclerViewLocations = findViewById(R.id.recycler_view_locations);
 
-        // Initialize RecyclerView
         recyclerViewLocations.setLayoutManager(new LinearLayoutManager(this));
         allLocations = getSampleLocations();
         filteredLocations = new ArrayList<>(allLocations);
         locationAdapter = new LocationAdapter(filteredLocations, this);
         recyclerViewLocations.setAdapter(locationAdapter);
 
-        // List of Districts in Ho Chi Minh City
         List<String> districtList = new ArrayList<>();
         districtList.add("Tất cả");  // "All"
         districtList.add("Quận 1");
@@ -105,12 +103,10 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
         districtList.add("Quận Gò Vấp");
         districtList.add("Thủ Đức");
 
-        // Create ArrayAdapter for Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, districtList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDistrict.setAdapter(adapter);
 
-        // Handle Spinner Selection
         spinnerDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -126,17 +122,15 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-        // Initialize map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFragment);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-        // Set up address click listener
+
         TextView tvAddress = findViewById(R.id.tvAddress);
         tvAddress.setOnClickListener(v -> openGoogleMaps());
 
-        // Handle menu item clicks
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -164,6 +158,7 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
     }
+
     private void filterLocations(String district) {
         if (district.equals("Tất cả")) {
             filteredLocations.clear();
@@ -230,15 +225,14 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private void openCartActivity() {
-        // Hiển thị CartDialogFragment thay vì BottomSheetDialogFragment
         CartDialogFragment cartFragment = new CartDialogFragment();
         cartFragment.show(getSupportFragmentManager(), "CartDialog");
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add marker and move camera
         mMap.addMarker(new MarkerOptions().position(LOCATION).title("Main store location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LOCATION, 15));
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -246,7 +240,7 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
     }
-        //Method chuyen sang app google map
+
     private void openGoogleMaps() {
         Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + Uri.encode(ADDRESS));
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -255,42 +249,5 @@ public class GgmapActivity extends AppCompatActivity implements OnMapReadyCallba
             startActivity(mapIntent);
         }
     }
-//    private void getUserLocation() {
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST);
-//            return;
-//        }
-//        // Get last known location
-//        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        if (lastKnownLocation != null) {
-//            updateUserLocation(lastKnownLocation);
-//        }
-//        // Request real-time location updates
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, new LocationListener() {
-//            @Override
-//            public void onLocationChanged(@NonNull Location location) {
-//                updateUserLocation(location);
-//            }
-//            @Override
-//            public void onStatusChanged(String provider, int status, Bundle extras) {}
-//            @Override
-//            public void onProviderEnabled(String provider) {}
-//            @Override
-//            public void onProviderDisabled(String provider) {}
-//        });
-//    }
-//
-//    private void updateUserLocation(Location location) {
-//        LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-//
-//        if (userMarker == null) {
-//            userMarker = mMap.addMarker(new MarkerOptions().position(userLatLng).title("Your Location"));
-//        } else {
-//            userMarker.setPosition(userLatLng);
-//        }
-//
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-//    }
 
 }

@@ -115,6 +115,7 @@ public class CartDialogFragment extends DialogFragment {
     }
 
     private void loadCartData() {
+
         try {
             // Lấy danh sách sản phẩm trong giỏ hàng
             List<Cart> cartList = cartController.getCartItems();
@@ -123,17 +124,17 @@ public class CartDialogFragment extends DialogFragment {
 
             if (cartList.isEmpty()) {
                 // Hiển thị thông báo giỏ hàng trống
+
                 showEmptyCart();
                 return;
             }
 
-            // Tính tổng tiền
             totalPrice = 0;
 
-            // Chuyển đổi từ Cart sang CartItem (thêm thông tin sản phẩm)
             for (Cart cart : cartList) {
                 Product product = productController.getProductById(cart.getProductId());
-
+                int productId = cart.getProductId();
+                Log.e(TAG,  "Product ID: " + productId);
                 if (product != null) {
                     CartItem cartItem = new CartItem(cart, product);
                     cartItems.add(cartItem);

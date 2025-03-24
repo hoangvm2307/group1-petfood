@@ -3,6 +3,7 @@ package com.example.group1_petfood.activities;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -17,12 +18,15 @@ import com.example.group1_petfood.adapters.CategoryAdapter;
 import com.example.group1_petfood.adapters.ProductAdapter;
 import com.example.group1_petfood.controllers.CartController;
 import com.example.group1_petfood.controllers.CategoryController;
+import com.example.group1_petfood.controllers.ChatController;
 import com.example.group1_petfood.controllers.ProductController;
 import com.example.group1_petfood.database.DatabaseHelper;
 import com.example.group1_petfood.database.DatabaseInitializer;
+import com.example.group1_petfood.fragments.ChatDialogFragment;
 import com.example.group1_petfood.utils.ToolbarHelper;
 import com.example.group1_petfood.models.Category;
 import com.example.group1_petfood.models.Product;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -43,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private ProductController productController;
     private DatabaseInitializer dbInitializer;
     private CartController cartController;
+    private ChatController chatController;
     private ToolbarHelper toolbarHelper;
+    private FloatingActionButton chatButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         setupBanner();
         setupRecyclerViews();
         initializeDatabase();
+        chatboxOnClick();
         toolbarHelper.updateCartBadge();
 
         loadData();
@@ -101,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         quickActionsRecyclerView = findViewById(R.id.quickActionsRecyclerView);
         categoriesRecyclerView = findViewById(R.id.categoriesRecyclerView);
         productsRecyclerView = findViewById(R.id.productsRecyclerView);
+        chatButton = findViewById(R.id.chatButton);
     }
 
     private void setupBanner() {
@@ -152,7 +160,15 @@ public class MainActivity extends AppCompatActivity {
         ProductAdapter productAdapter = new ProductAdapter(products);
         productsRecyclerView.setAdapter(productAdapter);
     }
-
+    private void chatboxOnClick(){
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatDialogFragment chatDialog = new ChatDialogFragment();
+                chatDialog.show(getSupportFragmentManager(), "ChatDialog");
+            }
+        });
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

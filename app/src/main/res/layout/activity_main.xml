@@ -110,11 +110,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_chat"
+                app:backgroundTint="#FF9999"
+                app:tint="@android:color/white"
                 android:layout_marginBottom="8dp"/>
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/callButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:backgroundTint="#FF9999"
+                app:tint="@android:color/white"
                 android:src="@drawable/ic_call"/>
         </LinearLayout>
 

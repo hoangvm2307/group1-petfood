@@ -1,9 +1,9 @@
 package com.example.group1_petfood.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,13 +26,29 @@ import com.example.group1_petfood.controllers.OrderController;
 import com.example.group1_petfood.controllers.ProductController;
 import com.example.group1_petfood.controllers.UserController;
 import com.example.group1_petfood.models.Order;
-import com.example.group1_petfood.utils.AccessControl;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.navigation.NavigationView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AdminDashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,6 +59,7 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
     private TextView totalRevenueTextView, avgRevenueTextView, welcomeTextView, dateTextView;
     private Button refreshButton;
     private RecyclerView recentOrdersRecyclerView;
+    private BarChart revenueChart; // Biểu đồ doanh thu
 
     // Controllers
     private ProductController productController;
@@ -62,12 +79,6 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
-
-        // Kiểm tra quyền truy cập
-//        if (!AccessControl.requireAdmin(this)) {
-//            finish();
-//            return;
-//        }
 
         // Khởi tạo controllers
         initializeControllers();
@@ -110,10 +121,6 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
         totalRevenueTextView = findViewById(R.id.totalRevenueTextView);
         avgRevenueTextView = findViewById(R.id.avgRevenueTextView);
 
-//        // Welcome info
-//        welcomeTextView = findViewById(R.id.welcomeTextView);
-//        dateTextView = findViewById(R.id.dateTextView);
-
         // Button
         refreshButton = findViewById(R.id.refreshButton);
 
@@ -121,8 +128,17 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
         recentOrdersRecyclerView = findViewById(R.id.recentOrdersRecyclerView);
         recentOrdersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Biểu đồ doanh thu
+        revenueChart = findViewById(R.id.revenueChart);
+
         // DrawerLayout
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        // Ngày hiện tại
+        TextView dateTimeTextView = findViewById(R.id.dateTimeTextView);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy", new Locale("vi", "VN"));
+        String currentDate = dateFormat.format(new Date());
+        dateTimeTextView.setText(currentDate);
     }
 
     private void setupNavigationDrawer() {
@@ -149,9 +165,9 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
 
     private void updateDashboardData() {
         updateStats();
-//        updateWelcomeInfo();
         loadRecentOrders();
         updateRevenueInfo();
+        setupRevenueChart();
     }
 
     private void updateStats() {
@@ -171,30 +187,31 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
         Log.d(TAG, "Order Count: " + orderCount);
     }
 
-    private void updateWelcomeInfo() {
-        // Cập nhật tên người dùng và ngày
-        welcomeTextView.setText("Xin chào, Quản trị viên");
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd/MM/yyyy", new Locale("vi", "VN"));
-        String currentDate = dateFormat.format(new Date());
-        dateTextView.setText(currentDate);
-    }
-
     private void loadRecentOrders() {
         recentOrders = orderController.getAllOrders();
         if (recentOrders != null && !recentOrders.isEmpty()) {
-
             int limit = Math.min(recentOrders.size(), 5);
             List<Order> limitedOrders = recentOrders.subList(0, limit);
 
             orderAdapter = new OrderAdapter(limitedOrders);
             recentOrdersRecyclerView.setAdapter(orderAdapter);
+
+            // Ẩn thông báo không có đơn hàng
+            TextView noOrdersTextView = findViewById(R.id.noOrdersTextView);
+            if (noOrdersTextView != null) {
+                noOrdersTextView.setVisibility(View.GONE);
+            }
+        } else {
+            // Hiển thị thông báo không có đơn hàng
+            TextView noOrdersTextView = findViewById(R.id.noOrdersTextView);
+            if (noOrdersTextView != null) {
+                noOrdersTextView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     private void updateRevenueInfo() {
-        // Trong thực tế, dữ liệu này sẽ được lấy từ cơ sở dữ liệu
-        // Ở đây tạm thời hiển thị dữ liệu giả
+        // Tính tổng doanh thu từ các đơn hàng
         double totalRevenue = calculateTotalRevenue();
         double avgDailyRevenue = totalRevenue / 7; // Tính trung bình 7 ngày
 
@@ -203,7 +220,6 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
     }
 
     private double calculateTotalRevenue() {
-        // Tính tổng doanh thu từ các đơn hàng
         double total = 0;
         if (recentOrders != null) {
             for (Order order : recentOrders) {
@@ -215,6 +231,102 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
 
     private String formatCurrency(double amount) {
         return String.format(Locale.getDefault(), "%,.0f₫", amount);
+    }
+
+    private void setupRevenueChart() {
+        // Lấy dữ liệu doanh thu theo ngày trong 7 ngày gần nhất
+        Map<String, Double> weeklyRevenueData = getWeeklyRevenueData();
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        ArrayList<String> xAxisLabels = new ArrayList<>();
+
+        int index = 0;
+        for (Map.Entry<String, Double> entry : weeklyRevenueData.entrySet()) {
+            barEntries.add(new BarEntry(index, entry.getValue().floatValue()));
+            xAxisLabels.add(entry.getKey());
+            index++;
+        }
+
+        // Tạo dataset
+        BarDataSet dataSet = new BarDataSet(barEntries, "Doanh thu (VNĐ)");
+        dataSet.setColor(Color.rgb(65, 105, 225)); // Màu xanh dương
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextSize(10f);
+
+        // Tạo BarData
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.6f);
+
+        // Cấu hình biểu đồ
+        revenueChart.setData(barData);
+        revenueChart.getDescription().setEnabled(false);
+        revenueChart.setDrawGridBackground(false);
+        revenueChart.setDrawBorders(false);
+        revenueChart.setDrawValueAboveBar(true);
+
+        // Cấu hình trục X
+        XAxis xAxis = revenueChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisLabels));
+
+        // Cấu hình trục Y
+        YAxis leftAxis = revenueChart.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setDrawZeroLine(true);
+        leftAxis.setAxisMinimum(0f);
+
+        // Ẩn trục Y bên phải
+        revenueChart.getAxisRight().setEnabled(false);
+
+        // Cấu hình legend
+        revenueChart.getLegend().setEnabled(true);
+
+        // Vô hiệu hóa zoom
+        revenueChart.setScaleEnabled(false);
+        revenueChart.setDoubleTapToZoomEnabled(false);
+
+        // Cập nhật biểu đồ
+        revenueChart.invalidate();
+    }
+
+    private Map<String, Double> getWeeklyRevenueData() {
+        Map<String, Double> dailyRevenue = new TreeMap<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM", Locale.getDefault());
+
+        // Tạo map cho 7 ngày gần nhất
+        Calendar calendar = Calendar.getInstance();
+        for (int i = 6; i >= 0; i--) {
+            Calendar tempCal = (Calendar) calendar.clone();
+            tempCal.add(Calendar.DAY_OF_MONTH, -i);
+            String dateKey = dateFormat.format(tempCal.getTime());
+            String displayDate = displayFormat.format(tempCal.getTime());
+            dailyRevenue.put(displayDate, 0.0);
+        }
+
+        // Thêm doanh thu từ các đơn hàng
+        if (recentOrders != null) {
+            for (Order order : recentOrders) {
+                try {
+                    // Lấy ngày tạo đơn hàng
+                    Date orderDate = dateFormat.parse(order.getCreatedAt().substring(0, 10));
+                    if (orderDate != null) {
+                        String displayDate = displayFormat.format(orderDate);
+                        // Kiểm tra nếu ngày này nằm trong 7 ngày gần nhất
+                        if (dailyRevenue.containsKey(displayDate)) {
+                            double currentAmount = dailyRevenue.get(displayDate);
+                            dailyRevenue.put(displayDate, currentAmount + order.getTotalAmount());
+                        }
+                    }
+                } catch (ParseException e) {
+                    Log.e(TAG, "Error parsing date: " + e.getMessage());
+                }
+            }
+        }
+
+        return dailyRevenue;
     }
 
     @Override

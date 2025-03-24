@@ -85,6 +85,12 @@ public class PaymentActivity extends AppCompatActivity {
             JSONObject data = orderApi.createOrder(totalString);
             String code = data.getString("return_code");
 
+            // Tạo đơn hàng mới
+            createNewOrder();
+
+            // Xóa giỏ hàng
+            clearCart();
+
             if (code.equals("1")) {
                 String token = data.getString("zp_trans_token");
 
@@ -138,9 +144,11 @@ public class PaymentActivity extends AppCompatActivity {
                         finish();
                     }
                 });
+
             } else {
                 Toast.makeText(this, "Không thể tạo thanh toán: " + data.getString("return_message"), Toast.LENGTH_LONG).show();
             }
+
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi xử lý thanh toán: " + e.getMessage());
             e.printStackTrace();

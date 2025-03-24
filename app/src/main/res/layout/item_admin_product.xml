@@ -19,7 +19,7 @@
         android:padding="12dp">
 
         <ImageView
-            android:id="@+id/productThumbnail"
+            android:id="@+id/productImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:scaleType="centerCrop"
@@ -27,6 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
 
         <TextView
             android:id="@+id/productName"
@@ -38,7 +39,7 @@
             android:textStyle="bold"
             android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintStart_toEndOf="@id/productThumbnail"
+            app:layout_constraintStart_toEndOf="@id/productImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -51,7 +52,7 @@
             android:text="100,000₫"
             android:textSize="15sp"
             android:textColor="@android:color/holo_red_dark"
-            app:layout_constraintStart_toEndOf="@id/productThumbnail"
+            app:layout_constraintStart_toEndOf="@id/productImage"
             app:layout_constraintTop_toBottomOf="@id/productName"/>
 
         <TextView
@@ -62,7 +63,7 @@
             android:layout_marginTop="4dp"
             android:text="Số lượng: 10"
             android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@id/productThumbnail"
+            app:layout_constraintStart_toEndOf="@id/productImage"
             app:layout_constraintTop_toBottomOf="@id/productPrice"/>
 
         <ImageButton

@@ -68,4 +68,16 @@ public class CategoryController {
         List<Category> categories = getAllCategories();
         return categories.size();
     }
+    public String getCategoryNameById(int categoryId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String categoryName = "Không xác định"; // Giá trị mặc định nếu không tìm thấy
+        Cursor cursor = db.rawQuery("SELECT name FROM categories WHERE id = ?", new String[]{String.valueOf(categoryId)});
+        if (cursor.moveToFirst()) {
+            categoryName = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
+        return categoryName;
+    }
+
 }

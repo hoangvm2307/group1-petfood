@@ -37,7 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_user_management, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
         return new UserViewHolder(view);
     }
 
@@ -66,7 +66,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
                 break;
         }
 
-        // Thiết lập sự kiện click
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onUserAction(user, UserAction.VIEW);

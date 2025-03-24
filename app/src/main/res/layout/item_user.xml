@@ -8,6 +8,7 @@
     android:layout_marginEnd="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
+    android:background="#fff"
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp"
     app:strokeWidth="1dp"
@@ -16,8 +17,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
-
+        android:padding="16dp"
+        android:background="#fff">
         <!-- Avatar -->
         <ImageView
             android:id="@+id/userAvatar"

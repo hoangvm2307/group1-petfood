@@ -91,7 +91,6 @@ public class ProductController {
         values.put("image_url", product.getImageUrl());
         values.put("created_at", product.getCreatedAt());
         values.put("updated_at", product.getUpdatedAt());
-
         long result = db.insert("products", null, values);
         db.close();
         return result != -1;

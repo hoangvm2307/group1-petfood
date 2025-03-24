@@ -16,6 +16,15 @@ public class Product implements Serializable {
 
     // Constructor
     public Product() {}
+    public Product(String name, String brand, String description, double price, int stockQuantity, String imageUrl, int categoryId) {
+        this.name = name;
+        this.brand = brand;
+        this.description = description;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.imageUrl = imageUrl;
+        this.categoryId=categoryId;
+    }
 
     // Getters and Setters
     public int getId() { return id; }

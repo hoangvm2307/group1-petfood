@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hỗ trợ trực tuyến"
+                android:text="Quản lý tin nhắn"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sẵn sàng giải đáp mọi thắc mắc"
+                android:text="Xem và trả lời tin nhắn từ khách hàng"
                 android:textColor="#E0E0E0"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -53,43 +53,64 @@
             app:tint="@android:color/white" />
     </LinearLayout>
 
-    <!-- Chat Messages RecyclerView -->
+    <!-- User Selection RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatRecyclerView"
+        android:id="@+id/userRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="8dp"
         android:background="#FFFFFF"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:visibility="visible" />
 
-    <!-- Message Input and Send Button -->
+    <!-- Chat Container (hidden until a user is selected) -->
     <LinearLayout
+        android:id="@+id/chatContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <EditText
-            android:id="@+id/messageInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <!-- Chat Messages RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@android:drawable/edit_text"
-            android:hint="Nhập nội dung..."
-            android:padding="12dp"
-            android:textSize="14sp"
-            android:backgroundTint="#E0E0E0" />
+            android:layout_marginTop="8dp"
+            android:background="#FFFFFF"
+            android:padding="8dp" />
 
-        <ImageButton
-            android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
+        <!-- Message Input and Send Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:src="@android:drawable/ic_menu_send"
-            app:tint="#4CAF50" />
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/messageInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:drawable/edit_text"
+                android:hint="Nhập nội dung..."
+                android:padding="12dp"
+                android:textSize="14sp"
+                android:backgroundTint="#E0E0E0" />
+
+            <ImageButton
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_send"
+                app:tint="#4CAF50" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

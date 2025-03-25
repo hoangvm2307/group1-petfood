@@ -17,18 +17,22 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.group1_petfood.adapters.ChatAdapter;
+import com.example.group1_petfood.adapters.UserChatAdapter;
 import com.example.group1_petfood.controllers.ChatController;
-import com.example.group1_petfood.databinding.FragmentChatboxDialogBinding;
+import com.example.group1_petfood.databinding.FragmentAdminChatBinding;
 import com.example.group1_petfood.models.ChatMessage;
+import com.example.group1_petfood.models.User;
 
 import java.util.List;
 
-public class ChatDialogFragment extends DialogFragment implements ChatController.ChatListener {
+public class AdminChatFragment extends DialogFragment implements ChatController.ChatListener, UserChatAdapter.OnUserClickListener {
 
-    private FragmentChatboxDialogBinding binding;
+    private FragmentAdminChatBinding binding;
     private ChatAdapter chatAdapter;
+    private UserChatAdapter userChatAdapter;
     private ChatController chatController;
     private int userId;
+    private int selectedUserId; // Track the selected user for admin chat
 
     // SharedPreferences keys (matching LoginActivity)
     private static final String PREF_NAME = "user_pref";
@@ -38,7 +42,7 @@ public class ChatDialogFragment extends DialogFragment implements ChatController
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentChatboxDialogBinding.inflate(inflater, container, false);
+        binding = FragmentAdminChatBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -63,16 +67,22 @@ public class ChatDialogFragment extends DialogFragment implements ChatController
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt(KEY_USER_ID, 1); // Default to 1 if not found
 
-        // Initialize ChatController (isAdmin is false for users)
-        chatController = new ChatController(getContext(), userId, false, this);
+        // Initialize ChatController (isAdmin is true for admins)
+        chatController = new ChatController(getContext(), userId, true, this);
 
         // Set up RecyclerView for chat messages
         chatAdapter = new ChatAdapter();
         binding.chatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.chatRecyclerView.setAdapter(chatAdapter);
 
-        // Load user's messages
-        loadMessages();
+        // Set up RecyclerView for user selection
+        userChatAdapter = new UserChatAdapter(this);
+        binding.userRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.userRecyclerView.setAdapter(userChatAdapter);
+
+        // Load list of users with messages
+        List<User> users = chatController.getUsersWithMessages();
+        userChatAdapter.setUserList(users);
 
         // Close button listener
         binding.closeButton.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +99,8 @@ public class ChatDialogFragment extends DialogFragment implements ChatController
             public void onClick(View v) {
                 String messageText = binding.messageInput.getText().toString();
                 if (!messageText.isEmpty()) {
-                    // User sends a message
-                    chatController.addChatMessage(messageText);
+                    // Admin sends a message to the selected user
+                    chatController.addChatMessageForUser(selectedUserId, messageText);
                     binding.messageInput.setText("");
                 }
             }
@@ -98,7 +108,8 @@ public class ChatDialogFragment extends DialogFragment implements ChatController
     }
 
     private void loadMessages() {
-        List<ChatMessage> messages = chatController.getAllChatMessages();
+        List<ChatMessage> messages = chatController.getMessagesForUser(selectedUserId);
+        chatAdapter.clearMessages(); // Clear existing messages
         for (ChatMessage message : messages) {
             chatAdapter.addMessage(message);
         }
@@ -110,8 +121,20 @@ public class ChatDialogFragment extends DialogFragment implements ChatController
     @Override
     public void onMessageReceived(ChatMessage message) {
         // Update the UI when a new message is received
-        chatAdapter.addMessage(message);
-        binding.chatRecyclerView.scrollToPosition(chatAdapter.getItemCount() - 1);
+        // Only add the message if it belongs to the currently viewed user
+        if (message.getUserId() == selectedUserId) {
+            chatAdapter.addMessage(message);
+            binding.chatRecyclerView.scrollToPosition(chatAdapter.getItemCount() - 1);
+        }
+    }
+
+    @Override
+    public void onUserClick(User user) {
+        // Admin selected a user to chat with
+        selectedUserId = user.getId();
+        binding.userRecyclerView.setVisibility(View.GONE);
+        binding.chatContainer.setVisibility(View.VISIBLE);
+        loadMessages();
     }
 
     @Override

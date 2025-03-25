@@ -45,7 +45,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public int getItemCount() {
         return messages.size();
     }
-
+    public void clearMessages() {
+        messages.clear();
+        notifyDataSetChanged();
+    }
     static class ChatViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout userMessageContainer;
         private LinearLayout adminMessageContainer;

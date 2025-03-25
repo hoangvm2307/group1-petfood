@@ -623,16 +623,30 @@
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <!-- FAB for Quick Add -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAdd"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            app:backgroundTint="@color/primary_color"
-            app:tint="@color/white"/>
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/chatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chat"
+                app:backgroundTint="#FF9999"
+                app:tint="@android:color/white"
+                android:layout_marginBottom="8dp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                app:backgroundTint="@color/primary_color"
+                app:tint="@color/white"/>
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

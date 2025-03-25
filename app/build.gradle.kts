@@ -48,9 +48,9 @@ android {
 }
 
 dependencies {
- 
+
     implementation("com.google.android.gms:play-services-maps:18.0.2")
- 
+
     implementation ("com.squareup.picasso:picasso:2.8")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation(libs.appcompat)
@@ -77,7 +77,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
- 
+
     // Sử dụng BOM để tự động đồng bộ phiên bản Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
 
@@ -98,6 +98,5 @@ dependencies {
 
 
 }
- 
  
  

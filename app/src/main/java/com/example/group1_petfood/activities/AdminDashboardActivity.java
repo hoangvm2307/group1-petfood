@@ -25,6 +25,7 @@ import com.example.group1_petfood.controllers.CategoryController;
 import com.example.group1_petfood.controllers.OrderController;
 import com.example.group1_petfood.controllers.ProductController;
 import com.example.group1_petfood.controllers.UserController;
+import com.example.group1_petfood.fragments.AdminChatFragment;
 import com.example.group1_petfood.models.Order;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -161,8 +162,15 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
             updateDashboardData();
             Toast.makeText(this, "Dữ liệu đã được cập nhật", Toast.LENGTH_SHORT).show();
         });
-    }
 
+        findViewById(R.id.chatButton).setOnClickListener(v -> {
+            openAdminChat();
+        });
+    }
+    private void openAdminChat() {
+        AdminChatFragment chatDialog = new AdminChatFragment();
+        chatDialog.show(getSupportFragmentManager(), "AdminChatDialog");
+    }
     private void updateDashboardData() {
         updateStats();
         loadRecentOrders();

@@ -197,6 +197,9 @@ public class CartController {
                     "SELECT * FROM cart WHERE user_id = ?",
                     new String[]{String.valueOf(userId)});
 
+            Log.d(TAG, "Đang truy vấn giỏ hàng cho user_id: " + userId);
+            Log.d(TAG, "Số lượng cart items tìm thấy: " + cursor.getCount());
+
             if (cursor.moveToFirst()) {
                 do {
                     Cart cart = new Cart();
@@ -207,12 +210,16 @@ public class CartController {
                     cart.setCreatedAt(cursor.getString(cursor.getColumnIndexOrThrow("created_at")));
                     cart.setUpdatedAt(cursor.getString(cursor.getColumnIndexOrThrow("updated_at")));
 
+
                     cartItems.add(cart);
                 } while (cursor.moveToNext());
             }
 
             cursor.close();
-            Log.d(TAG, "Lấy " + cartItems.size() + " sản phẩm từ giỏ hàng");
+
+            // Log tổng số cart items sau khi xử lý
+            Log.d(TAG, "Tổng số cart items được trả về: " + cartItems.size());
+
         } catch (Exception e) {
             Log.e(TAG, "Lỗi khi lấy sản phẩm từ giỏ hàng: " + e.getMessage());
             e.printStackTrace();
@@ -331,7 +338,26 @@ public class CartController {
 
         return success;
     }
+    public boolean clearAllCartsInDatabase() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        boolean success = false;
 
+        try {
+            // Xóa tất cả dữ liệu trong bảng cart
+            int deletedRows = db.delete("cart", null, null);
+
+            success = true;
+            Log.d(TAG, "Đã xóa toàn bộ giỏ hàng trong database. Số dòng đã xóa: " + deletedRows);
+        } catch (Exception e) {
+            Log.e(TAG, "Lỗi khi xóa toàn bộ giỏ hàng: " + e.getMessage());
+            e.printStackTrace();
+            success = false;
+        } finally {
+            db.close();
+        }
+
+        return success;
+    }
     /**
      * Lấy thời gian hiện tại dưới dạng chuỗi
      * @return Chuỗi thời gian hiện tại

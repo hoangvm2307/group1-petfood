@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private ProductController productController;
     private DatabaseInitializer dbInitializer;
     private CartController cartController;
-    private ChatController chatController;
     private ToolbarHelper toolbarHelper;
     private FloatingActionButton chatButton;
 

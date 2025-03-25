@@ -163,13 +163,19 @@ public class AdminDashboardActivity extends AppCompatActivity implements Navigat
             Toast.makeText(this, "Dữ liệu đã được cập nhật", Toast.LENGTH_SHORT).show();
         });
 
-        findViewById(R.id.chatButton).setOnClickListener(v -> {
+        findViewById(R.id.adminChatButton).setOnClickListener(v -> {
             openAdminChat();
         });
     }
     private void openAdminChat() {
+        Log.d(TAG, "Opening AdminChatFragment");
         AdminChatFragment chatDialog = new AdminChatFragment();
-        chatDialog.show(getSupportFragmentManager(), "AdminChatDialog");
+        try {
+            chatDialog.show(getSupportFragmentManager(), "AdminChatFragment");
+            Log.d(TAG, "AdminChatFragment shown successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing AdminChatFragment: " + e.getMessage(), e);
+        }
     }
     private void updateDashboardData() {
         updateStats();
